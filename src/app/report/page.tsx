@@ -25,7 +25,7 @@ const geocodeAddress = async (address: string) => {
     const data = await response.json();
     if (data && data.length > 0) {
       // Return multiple results for user to choose from
-      return data.map((result: any) => ({
+      return data.map((result: {lat: string, lon: string, display_name: string, type: string, importance: number}) => ({
         lat: parseFloat(result.lat).toFixed(6),
         lon: parseFloat(result.lon).toFixed(6),
         displayName: result.display_name,
