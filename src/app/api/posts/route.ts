@@ -2,7 +2,6 @@
 import { supabase } from '@/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
