@@ -10,23 +10,25 @@ import Link from "next/link"
 export default function Home() {
   const { user } = useAuthContext() as { user: any };
   return (
-/*     <div className="flex flex-col">
-      {user && user.email}
-      <button onClick={signInWithGoogle}>
-        sign in
-      </button>
-      <button onClick={signOut}>
-        sign out
-      </button>
-    <div> */
-    <div className="relative">
-      <MapLayout />
-      <Link href="/report" className="absolute bottom-6 right-6">
-        <Button className="h-14 w-14 rounded-full shadow-lg border-2 border-black bg-white hover:bg-black/10 transition-colors duration-200">
-          <Plus className="h-6 w-6 text-black" />
-          <span className="sr-only">Add accident report</span>
-        </Button>
-      </Link>
+    <div>
+      <div className="flex flex-col">
+        {user && user.email}
+        <button onClick={signInWithGoogle}>
+          sign in
+        </button>
+        <button onClick={signOut}>
+          sign out
+        </button>
+      </div>
+      <div className="relative">
+        <MapLayout />
+        <Link href="/report" className="absolute bottom-6 right-6">
+          <Button className="h-14 w-14 rounded-full shadow-lg border-2 border-black bg-white hover:bg-black/10 transition-colors duration-200">
+            <Plus className="h-6 w-6 text-black" />
+            <span className="sr-only">Add accident report</span>
+          </Button>
+        </Link>
+      </div>
     </div>
   )
 }
