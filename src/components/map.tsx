@@ -1,28 +1,46 @@
-"use client";
+"use client"
 
-import React, { useRef, useEffect } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import { useRef, useEffect } from "react"
+import mapboxgl from "mapbox-gl"
+import "mapbox-gl/dist/mapbox-gl.css"
 
-mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function Map() {
-  const mapContainer = useRef(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const mapContainer = useRef(null)
+  const map = useRef<mapboxgl.Map | null>(null)
 
   useEffect(() => {
-    if (!mapContainer.current) return;
-    if (map.current) return;
+    if (!mapContainer.current) return
+    if (map.current) return
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
+      style: "mapbox://styles/mapbox/streets-v12",
       center: [-73.9857, 40.7589],
       zoom: 9,
-    });
+    })
 
-    return () => map.current!.remove();
-  }, []);
+    const resizeMap = () => {
+      if (map.current) {
+        map.current.resize()
+      }
+    }
 
-  return <div ref={mapContainer} style={{ width: '100%', height: '500px' }} />;
+    window.addEventListener("resize", resizeMap)
+
+    return () => {
+      window.removeEventListener("resize", resizeMap)
+      if (map.current) map.current.remove()
+    }
+  }, [])
+
+  return (
+    <div
+      ref={mapContainer}
+      className="absolute inset-0"
+      style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0 }}
+    />
+  )
 }
+
