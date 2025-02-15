@@ -16,46 +16,40 @@ export default function LandingPage() {
             </span>
           </span>
         </Link>
-        <nav className="ml-auto flex gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#features">
-            Features
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#how-it-works">
-            How It Works
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#benefits">
-            Benefits
-          </Link>
-        </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-gradient-to-b from-white to-gray-400">
-          <div className="container mx-auto px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-6 text-center">
+        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 relative">
+          <div className="absolute inset-0 z-0">
+            <div className="w-full h-full bg-gray-100">
+            </div>
+          </div>
+          <div className="container mx-auto px-4 md:px-6 relative z-10">
+            <div className="flex flex-col items-center space-y-6 text-center backdrop-blur-sm bg-white/70 p-8 rounded-xl">
               <div className="space-y-4">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                <h1 className="text-3xl text-black font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                   Spot Hazards, Save Lives: {" "}
                   <span className="relative inline-block">
                     <span className="relative z-10">Just lmk</span>
                     <span className="absolute bottom-1 left-0 w-full h-[6px] bg-red-600/80 transform -rotate-2 z-0"></span>
                   </span>
                 </h1>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl">
+                <p className="mx-auto max-w-[800px] text-gray-700 md:text-2xl">
                   Use AI to report and map urban hazards in real-time. Make your city safer for everyone.
                 </p>
               </div>
               <div className="flex gap-4">
                 <Link href="/map">
-                  <Button className="bg-red-600 hover:bg-red-700">Get Started</Button>
+                  <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold px-8 py-4 text-lg rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-110">
+                    Get Started
+                  </Button>
                 </Link>
-                <Button variant="outline">Learn More</Button>
               </div>
             </div>
           </div>
         </section>
         <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-white">
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Key Features</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12 text-gray-700">Key Features</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <FeatureCard
                 icon={<Camera className="h-10 w-10 text-red-600" />}
@@ -77,7 +71,7 @@ export default function LandingPage() {
         </section>
         <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">How It Works</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <StepCard
                 number={1}
@@ -99,7 +93,7 @@ export default function LandingPage() {
         </section>
         <section id="benefits" className="w-full py-12 md:py-24 lg:py-32 bg-white">
           <div className="container mx-auto px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">Who Benefits</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">Perfect For Everyone.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <BeneficiaryCard
                 title="Pedestrians & Cyclists"
@@ -126,22 +120,17 @@ export default function LandingPage() {
               Be part of making your city safer. Sign up for early access and help shape the future of urban safety.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <Input className="max-w-sm bg-white" placeholder="Enter your email" type="email" />
-              <Button className="bg-white text-red-600 hover:bg-gray-100">Get Early Access</Button>
+             <Link href="/map">
+                <Button className="bg-white text-red-600 hover:bg-gray-100 text-lg font-bold px-12 py-6 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 border-white/20 backdrop-blur-sm">
+                  Get Started Now
+                </Button>
+             </Link>
             </div>
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-8 md:px-12 border-t">
-        <p className="text-xs text-gray-500">© 2024 HazardSpotter. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
-          </Link>
-        </nav>
+      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center justify-center px-8 md:px-12 border-t">
+        <p className="text-xs text-gray-500 text-center">© 2025 lmk. All rights reserved.</p>
       </footer>
     </div>
   )
@@ -157,7 +146,7 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
   return (
     <div className="flex flex-col items-center text-center">
       <div className="mb-4">{icon}</div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-500">{description}</p>
     </div>
   )
@@ -175,7 +164,7 @@ function StepCard({ number, title, description }: StepCardProps) {
       <div className="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center text-xl font-bold mb-4">
         {number}
       </div>
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
       <p className="text-gray-500">{description}</p>
     </div>
   )
@@ -189,8 +178,8 @@ interface BeneficiaryCardProps {
 function BeneficiaryCard({ title, description }: BeneficiaryCardProps) {
   return (
     <div className="border rounded-lg p-6">
-      <h3 className="text-xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-500">{description}</p>
+      <h3 className="text-xl font-bold text-gray-900 mb-2">{title}</h3>
+      <p className="text-gray-600">{description}</p>
     </div>
   )
 }
