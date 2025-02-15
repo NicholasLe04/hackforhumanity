@@ -90,12 +90,12 @@ export default function ReportPage() {
             <label htmlFor="description" className="block text-sm font-medium">
               Description
             </label>
-            <Textarea
+            <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe the incident..."
-              className="h-32"
+              placeholder="Describe incident..."
+              className="placeholder-gray-500 placeholder-opacity-100 w-full border border-gray-300 rounded-md text-sm p-2"
             />
           </div>
 
@@ -106,7 +106,7 @@ export default function ReportPage() {
               <SelectTrigger>
                 <SelectValue placeholder="Select location type" />
               </SelectTrigger>
-              <SelectContent className="text-black bg-white">
+              <SelectContent >
                 <SelectItem value="auto">Use Current Location</SelectItem>
                 <SelectItem value="manual">Enter Coordinates Manually</SelectItem>
               </SelectContent>
@@ -125,7 +125,7 @@ export default function ReportPage() {
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full rounded-md" disabled={!selectedImage || !title || !description || !lat || !lon}>
+          <Button type="submit" className="w-full rounded-md cursor-pointer" disabled={!selectedImage || (!title && !description) || (!lat && !lon)}>
             Submit Report
           </Button>
         </form>
@@ -135,8 +135,8 @@ export default function ReportPage() {
       <div className="w-full md:w-1/2 p-8 bg-gray-50 flex items-center justify-center">
         <div
           {...getRootProps()}
-          className={`w-full h-full flex items-center justify-center border-2 border-dashed rounded-lg cursor-pointer transition-colors
-            ${isDragActive ? "border-primary bg-primary/5" : "border-gray-300 hover:border-gray-400"}`}
+          className={`w-full h-full flex items-center justify-center border border-input rounded-md cursor-pointer transition-colors
+            ${isDragActive ? "border-primary bg-primary/5" : "hover:border-primary"}`}
         >
           <input {...getInputProps()} />
           {imagePreview ? (
@@ -148,12 +148,12 @@ export default function ReportPage() {
                 height={400}
                 style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "100%" }}
               />
-              <p className="text-sm text-muted-foreground">Drop a new image to replace</p>
+              <p className="text-sm text-muted-foreground">Click or drag to replace image</p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-4 text-center">
               <MapPin className="h-12 w-12 text-muted-foreground" />
-              <p>Drag and drop an image here, or click to select</p>
+              <p className="text-muted-foreground">Click or drag and drop to upload image</p>
               <p className="text-sm text-muted-foreground">Supports JPG, PNG, GIF, WEBP</p>
             </div>
           )}
