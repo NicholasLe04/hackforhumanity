@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import Image from "next/image"
 import { useCallback, useState, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
@@ -11,14 +10,51 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+const geocodeAddress = async (address: string) => {
+  const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
+  
+  try {
+    const response = await fetch(endpoint, {
+      headers: {
+        'Accept-Language': 'en-US,en;q=0.9',
+        'User-Agent': 'hackforhumanity-app' // Required by Nominatim ToS
+      }
+    });
+    const data = await response.json();
+    if (data && data.length > 0) {
+      // Return multiple results for user to choose from
+      return data.map((result: any) => ({
+        lat: parseFloat(result.lat).toFixed(6),
+        lon: parseFloat(result.lon).toFixed(6),
+        displayName: result.display_name,
+        type: result.type,
+        importance: result.importance
+      }));
+    }
+    throw new Error('No results found');
+  } catch (error) {
+    console.error('Geocoding error:', error);
+    return null;
+  }
+};
+
 export default function ReportPage() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [locationType, setLocationType] = useState<"auto" | "manual">("auto")
+  const [locationType, setLocationType] = useState<"auto" | "manual" | "address">("auto")
   const [lat, setLat] = useState("")
   const [lon, setLon] = useState("")
+  const [address, setAddress] = useState("")
+  const [addressResults, setAddressResults] = useState<Array<{
+    lat: string;
+    lon: string;
+    displayName: string;
+    type: string;
+    importance: number;
+  }>>([])
+  const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const file = acceptedFiles[0]
@@ -101,21 +137,90 @@ export default function ReportPage() {
           {/* Location Input */}
           <div className="space-y-2">
             <label className="block text-sm font-medium">Location</label>
-            <Select value={locationType} onValueChange={(value: "auto" | "manual") => setLocationType(value)}>
+            <Select value={locationType} onValueChange={(value: "auto" | "manual" | "address") => setLocationType(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select location type" />
               </SelectTrigger>
               <SelectContent >
                 <SelectItem value="auto">Use Current Location</SelectItem>
                 <SelectItem value="manual">Enter Coordinates Manually</SelectItem>
+                <SelectItem value="address">Enter Address</SelectItem>
               </SelectContent>
             </Select>
+
             {locationType === "manual" && (
               <div className="grid grid-cols-2 gap-4 mt-2">
                 <Input type="text" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="Latitude" />
                 <Input type="text" value={lon} onChange={(e) => setLon(e.target.value)} placeholder="Longitude" />
               </div>
             )}
+
+            {locationType === "address" && (
+              <div className="space-y-2 mt-2">
+                <Input 
+                  type="text" 
+                  value={address} 
+                  onChange={async (e) => {
+                    setAddress(e.target.value);
+                    setLat("");
+                    setLon("");
+                    setAddressResults([]);
+                    setSelectedAddress(null);
+                  }}
+                  placeholder="Enter address (e.g., 123 Main St, City, State)"
+                />
+                <Button 
+                  type="button" 
+                  variant="secondary" 
+                  className="w-full mt-2"
+                  onClick={async () => {
+                    if (address) {
+                      const results = await geocodeAddress(address);
+                      if (results && results.length > 0) {
+                        setAddressResults(results);
+                      }
+                    }
+                  }}
+                >
+                  Search Address
+                </Button>
+
+                {/* Address Results */}
+                {addressResults.length > 0 && (
+                  <div className="mt-4 space-y-2">
+                    <p className="text-sm font-medium">Select the correct address:</p>
+                    <div className="space-y-2 max-h-48 overflow-y-auto">
+                      {addressResults.map((result, index) => (
+                        <div
+                          key={index}
+                          className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                            selectedAddress === index 
+                              ? 'bg-red-50 border-red-200' 
+                              : 'hover:bg-gray-50 border-gray-200'
+                          }`}
+                          onClick={() => {
+                            setSelectedAddress(index);
+                            setLat(result.lat);
+                            setLon(result.lon);
+                          }}
+                        >
+                          <p className="text-sm font-medium">{result.displayName}</p>
+                          <p className="text-xs text-gray-500 mt-1">Type: {result.type}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {selectedAddress !== null && lat && lon && (
+                  <div className="mt-2 text-sm text-muted-foreground">
+                    <p>Selected Address: {addressResults[selectedAddress].displayName}</p>
+                    <p>Coordinates: {lat}, {lon}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {locationType === "auto" && (
               <div className="mt-2 text-sm text-muted-foreground">
                 {lat && lon ? `Current location: ${lat}, ${lon}` : "Fetching location..."}
@@ -147,12 +252,12 @@ export default function ReportPage() {
                 height={400}
                 style={{ objectFit: "contain", maxWidth: "100%", maxHeight: "100%" }}
               />
-              <p className="text-sm text-muted-foreground">Click or drag to replace image</p>
+              <p className="text-sm text-muted-foreground">Drop a new image to replace</p>       
             </div>
           ) : (
             <div className="flex flex-col items-center gap-4 text-center">
               <MapPin className="h-12 w-12 text-muted-foreground" />
-              <p className="text-muted-foreground">Click or drag and drop to upload image</p>
+              <p>Drag and drop an image here, or click to select</p>
               <p className="text-sm text-muted-foreground">Supports JPG, PNG, GIF, WEBP</p>
             </div>
           )}
