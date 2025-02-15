@@ -1,4 +1,4 @@
-import { supabase } from "../app";
+import { supabase } from "../client";
 
 // Function to sign in with email and password
 export default async function signInWithGoogle() {

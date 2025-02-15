@@ -9,6 +9,8 @@ import { ChevronDown, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useAuthContext } from "@/context/AuthContext"
+import { User } from "@supabase/supabase-js"
 
 const geocodeAddress = async (address: string) => {
   const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
@@ -39,13 +41,14 @@ const geocodeAddress = async (address: string) => {
 };
 
 export default function ReportPage() {
+  const { user } = useAuthContext() as { user: User };
   const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [locationType, setLocationType] = useState<"auto" | "manual" | "address">("auto")
-  const [lat, setLat] = useState("")
-  const [lon, setLon] = useState("")
+  const [lat, setLat] = useState<string>("")
+  const [lon, setLon] = useState<string>("")
   const [address, setAddress] = useState("")
   const [addressResults, setAddressResults] = useState<Array<{
     lat: string;
@@ -75,8 +78,8 @@ export default function ReportPage() {
     if (locationType === "auto") {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLat(position.coords.latitude.toFixed(6))
-          setLon(position.coords.longitude.toFixed(6))
+          setLat(position.coords.latitude.toFixed(10))
+          setLon(position.coords.longitude.toFixed(10))
         },
         (error) => {
           console.error("Error getting location:", error)
@@ -86,9 +89,23 @@ export default function ReportPage() {
   }, [locationType])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Submitting:", { selectedImage, title, description, lat, lon })
-  }
+    e.preventDefault();
+    
+    // Here you'll add the logic to submit the report
+    console.log('Submitting:', { selectedImage, description, location });
+
+    const data = new FormData();
+    data.append("author_id", user.id);
+    data.append("longitude", lon);
+    data.append("latitude", lat);
+    data.append("description", description);
+    data.append("image", selectedImage as File);
+
+    await fetch('/api/posts', {
+      method: 'POST',
+      body: data
+    })
+  };
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white text-black">
