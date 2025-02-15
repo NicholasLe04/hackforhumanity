@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^6.3.1",
-    "lucide-react": "^0.475.0",
-    "mapbox-gl": "^3.10.0",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.48.1",
     "next": "15.1.7",
-    "prisma": "^6.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "supabase": "^2.12.1",
+    "@prisma/client": "^6.3.1",
+    "lucide-react": "^0.475.0",
+    "prisma": "^6.3.1",
+    "mapbox-gl": "^3.10.0",
     "react-dropzone": "^14.3.5"
   },
   "devDependencies": {
