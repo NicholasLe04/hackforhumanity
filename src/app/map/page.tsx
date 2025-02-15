@@ -6,9 +6,10 @@ import MapLayout from "@/components/map-layout"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
 import Link from "next/link"
+import { User } from "@supabase/supabase-js";
 
 export default function MapPage() {
-  const { user } = useAuthContext() as { user: any };
+  const { user } = useAuthContext() as { user: User };
   
   return (
     <div>
