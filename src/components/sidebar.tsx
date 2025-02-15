@@ -8,6 +8,7 @@ import signInWithGoogle from "@/supabase/auth/signIn"
 import signOut from "@/supabase/auth/signOut"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 interface SidebarProps {
   isExpanded: boolean
@@ -20,10 +21,10 @@ export default function Sidebar({ isExpanded, setIsExpanded }: SidebarProps) {
 
   return (
     <div
-      className={`bg-gray-100 flex flex-col transition-all duration-300 ease-in-out ${isExpanded ? "w-64" : "w-16"}`}
+      className={`bg-gray-100 text-black flex flex-col transition-all duration-300 ease-in-out ${isExpanded ? "w-64" : "w-16"}`}
     >
       <div className="flex items-center justify-between p-4">
-        {isExpanded && <h1 className="text-xl font-bold">Map App</h1>}
+        {isExpanded && <Link className="text-xl font-bold" href="/">LET ME KNOW</Link>}
         <button onClick={() => setIsExpanded(!isExpanded)}>{isExpanded ? <X size={24} /> : <Menu size={24} />}</button>
       </div>
       {isExpanded && (
