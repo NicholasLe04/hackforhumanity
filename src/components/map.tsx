@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 import mapboxgl from "mapbox-gl"
 import "mapbox-gl/dist/mapbox-gl.css"
 
@@ -12,7 +12,6 @@ export default function Map() {
   const mapContainer = useRef<HTMLDivElement | null>(null)
   const mapInstance = useRef<mapboxgl.Map | null>(null)
   const markerInstance = useRef<mapboxgl.Marker | null>(null)
-  const [location, setLocation] = useState<[number, number]>(DEFAULT_CENTER)
 
   // Cleanup function to properly remove map instance
   const cleanupMap = () => {
@@ -55,7 +54,6 @@ export default function Map() {
               position.coords.longitude,
               position.coords.latitude
             ]
-            setLocation(newLocation)
 
             if (mapInstance.current && markerInstance.current) {
               mapInstance.current.flyTo({
