@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MapPin, AlertTriangle, Camera, Zap } from "lucide-react"
+import BackgroundMap from "@/components/background-map"
 
 export default function LandingPage() {
   const scrollToSection = (sectionId: string) => {
@@ -68,11 +69,9 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="w-full pt-32 pb-12 md:py-24 lg:py-32 xl:py-48 relative">
-          <div className="absolute inset-0 z-0">
-            <div className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white">
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-            </div>
+        <section className="w-full pt-32 pb-12 md:py-24 lg:py-32 xl:py-48 relative overflow-hidden">
+          <BackgroundMap />
+          <div className="absolute inset-0 z-0 bg-gradient-to-b from-white/60 via-white/30 to-white">
           </div>
           <div className="container mx-auto px-4 md:px-6 relative z-10">
             <div className="flex flex-col items-center space-y-8 text-center">
