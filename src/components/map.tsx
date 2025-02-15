@@ -11,37 +11,14 @@ const DEFAULT_CENTER: [number, number] = [-73.9855, 40.7484] // Empire State Bui
 export default function Map() {
   const mapContainer = useRef(null)
   const map = useRef<mapboxgl.Map | null>(null)
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null)
+  const marker = useRef<mapboxgl.Marker | null>(null)
+  const [userLocation, setUserLocation] = useState<[number, number]>(DEFAULT_CENTER)
 
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newLocation: [number, number] = [position.coords.longitude, position.coords.latitude]
-          setUserLocation(newLocation)
-          
-          // Update map center if map exists
-          if (map.current) {
-            map.current.setCenter(newLocation)
-            new mapboxgl.Marker()
-              .setLngLat(newLocation)
-              .addTo(map.current)
-          }
-        },
-        (error) => {
-          console.error("Error getting location:", error)
-        }
-      )
-    } else {
-      console.error("Geolocation is not supported by this browser")
-    }
-  }, [])
-
+  // Initialize map
   useEffect(() => {
     if (!mapContainer.current) return
     if (map.current) return
 
-    // Initialize map with default center
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
@@ -49,13 +26,9 @@ export default function Map() {
       zoom: 15,
     })
 
-    // Add marker if we already have user location
-    if (userLocation) {
-      new mapboxgl.Marker()
-        .setLngLat(userLocation)
-        .addTo(map.current)
-      map.current.setCenter(userLocation)
-    }
+    marker.current = new mapboxgl.Marker()
+      .setLngLat(DEFAULT_CENTER)
+      .addTo(map.current)
 
     const resizeMap = () => {
       if (map.current) {
@@ -69,7 +42,36 @@ export default function Map() {
       window.removeEventListener("resize", resizeMap)
       if (map.current) map.current.remove()
     }
-  }, []) // Only run on mount
+  }, [])
+
+  // Handle location updates
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newLocation: [number, number] = [
+            position.coords.longitude,
+            position.coords.latitude
+          ]
+          setUserLocation(newLocation)
+          
+          if (map.current && marker.current) {
+            map.current.flyTo({
+              center: newLocation,
+              zoom: 15,
+              duration: 2000
+            })
+            marker.current.setLngLat(newLocation)
+          }
+        },
+        (error) => {
+          console.error("Error getting location:", error)
+        }
+      )
+    } else {
+      console.error("Geolocation is not supported by this browser")
+    }
+  }, [])
 
   return (
     <div
