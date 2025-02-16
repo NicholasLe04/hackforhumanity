@@ -54,19 +54,24 @@ export default function MapPage() {
   }, []);
 
   return (
-    <div className="flex h-[100vh] w-full overflow-hidden">
-      <Sidebar 
-        isExpanded={isSidebarExpanded} 
-        setIsExpanded={setIsSidebarExpanded} 
-        posts={posts} 
-      />
-      <div className="flex-1 relative">
+    <div className="fixed inset-0 overflow-hidden">
+      <div className="absolute top-0 left-0 h-full z-10">
+        <Sidebar 
+          isExpanded={isSidebarExpanded} 
+          setIsExpanded={setIsSidebarExpanded} 
+          posts={posts} 
+        />
+      </div>
+      <div className="absolute inset-0">
         <Map posts={posts} />
       </div>
-        <Button onClick={handleReportClick} className="absolute bottom-6 right-6 group h-12 w-12 rounded-full bg-gradient-to-tr from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 shadow-[0_8px_30px_rgb(245,158,11,0.2)] hover:shadow-[0_8px_30px_rgb(245,158,11,0.4)] backdrop-blur-sm border border-white/20 hover:scale-105 transition-all duration-300">
-          <AlertTriangle className="h-5 w-5 text-white group-hover:rotate-12 transition-transform duration-300" />
-          <span className="sr-only">Report an incident</span>
-        </Button>
+      <Button 
+        onClick={handleReportClick} 
+        className="absolute bottom-6 right-6 group h-12 w-12 rounded-full bg-gradient-to-tr from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 shadow-[0_8px_30px_rgb(245,158,11,0.2)] hover:shadow-[0_8px_30px_rgb(245,158,11,0.4)] backdrop-blur-sm border border-white/20 hover:scale-105 transition-all duration-300"
+      >
+        <AlertTriangle className="h-5 w-5 text-white group-hover:rotate-12 transition-transform duration-300" />
+        <span className="sr-only">Report an incident</span>
+      </Button>
     </div>
   );
 }
