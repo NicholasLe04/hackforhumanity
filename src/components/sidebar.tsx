@@ -91,7 +91,8 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                   {filteredPosts.map((post) => (
                     <div
                       key={post.id}
-                      className={`p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer ${post.distance! < 0.5 ? 'bg-red-100' : post.distance! < 1 ? 'bg-orange-100' : post.distance! < 2 ? 'bg-yellow-100' : post.distance! < 5 ? 'bg-green-100' : 'bg-blue-100'}`}
+                      className={`p-2 rounded-xl transition-colors border border-gray-200/10 shadow-sm cursor-pointer
+                      ${post.urgency === 'Red' ? 'bg-red-200 hover:bg-red-500' : post.urgency === 'Yellow' ? 'bg-yellow-400 hover:bg-yellow-600' : post.urgency === 'Green' ? 'bg-green-200 hover:bg-green-400' : 'bg-blue-200 hover:bg-blue-400'}`}
                       onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                     >
                       <div className="flex justify-between items-center">
