@@ -12,7 +12,7 @@
   import { Textarea } from "@/components/ui/textarea"
   import { useAuthContext } from "@/context/AuthContext"
   import { User } from "@supabase/supabase-js"
-  
+  import { useToast } from "@/hooks/use-toast";
 
   const geocodeAddress = async (address: string) => {
     const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
@@ -61,6 +61,7 @@
     }>>([])
     const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { toast } = useToast();
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
@@ -98,6 +99,7 @@
       console.log('Submitting:', { selectedImage, description, lat, lon });
 
       try {
+        setIsLoading(true);
         const data = new FormData();
         data.append("author_id", user.id);
         data.append("title", title);
@@ -105,28 +107,47 @@
         data.append("latitude", lat);
         data.append("description", description);
         data.append("image", selectedImage as File);
-  
-        await fetch('/api/posts', {
+    
+        const response = await fetch('/api/posts', {
           method: 'POST',
           body: data
         });
-  
-        // Clear the form fields
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+    
+        // success toast
+        toast({
+          title: "Success",
+          description: "Report successfully submitted!",
+          variant: "default",
+        });
+    
+        // clear form
         setSelectedImage(null);
         setImagePreview(null);
         setTitle("");
         setDescription("");
         setLocationType("auto");
-        setLat("");
-        setLon("");
+        // don't clear coords...
+        // setLat("");
+        // setLon("");
         setAddress("");
         setAddressResults([]);
         setSelectedAddress(null);
+      } catch (error) {
+        console.error("Submission error:", error);
+        // error toast
+        toast({
+          title: "Error",
+          description: "Failed to submit report. Please try again.",
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
     };
-
     return (
       <div className="min-h-screen flex flex-col md:flex-row bg-white text-black">
         {/* Left Column - Form */}
