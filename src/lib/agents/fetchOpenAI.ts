@@ -56,8 +56,8 @@ export async function filterMe(apiKey: string, context: string, image: File | Bl
   const requestBody = {
     model: "gpt-4-turbo",
     messages: await createMessages(
-      "Describe the image.",
-      `First, state context in form Context: context. Then, state Image description as Image Description: You are to harvest valuable image from this photo. Only filter out information from this photo that is relevant to dangers, threats, dangerous people, or disasters and may pose harmful or risky to humans. For example, you would not mention key information such as puppy, roses, or chairs, but would instead retain information such as downed power lines, fires, dangerous people, criminals, illegal activity that is a safety issue to people, harassment, and smoke. Do not state additional information if not relevant. You should not elaborate further if you do not detect harmful material or people. Only elaborate on potentially harmful data. Answers should be incredibly detailed. \n CONTEXT: ${context}`,
+      "Describe the image. IMPORTANT: IF THIS IMAGE DOES NOT DESCRIBE A THREAT OR DANGER TO PEOPLE, YOU SHOULD RESPOND WITH 'NO DANGER DETECTED'",
+      `First, state context in form Context: context. Then, state Image description as Image Description: You are to harvest valuable image from this photo. Only filter out information from this photo that is relevant to dangers, threats, dangerous people, or disasters and may pose harmful or risky to humans. Explicitly list off the dangers in your string response. For example, you would not mention key information such as puppy, roses, or chairs, but would instead retain information such as downed power lines, fires, dangerous people, criminals, illegal activity that is a safety issue to people, harassment, and smoke. Do not state additional information if not relevant. You should not elaborate further if you do not detect harmful material or people. Only elaborate on potentially harmful data. Answers should be incredibly detailed. \n CONTEXT: ${context}`,
       image
     )
   };
@@ -104,9 +104,9 @@ export async function summarizeMe(apiKey: string, context: string) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
-      `Provide a single JSON field that is a summary for this provided text. Format it such that the description is like a news caption, do not explicity say this image. Rather, say a title, suchas 'Downed powerline in a residential area.' Follow the provided template: \n
+      `Provide a single JSON field that is a summary for this provided text. Forat like so: do not explicity say this image. Make it very short and concise, being straight to the point and excplicitly mentioning what the threat is. Say a title suchas 'Downed powerline in a residential area.' Follow the provided template: \n
       "summary": {
-        "description": STRING (Summarize data in a brief description. Should be similar to a news announcement.)
+        "description": STRING (Summarize data in a brief description.)
       }`,
       `CONTEXT: ${context}`
     ),
