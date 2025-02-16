@@ -31,9 +31,9 @@ export default function BackgroundMap() {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/light-v11',
         center: SCU_COORDINATES,
-        zoom: 14.5, // Slightly zoomed out to show more context
+        zoom: 14.5,
         bearing: -30,
-        pitch: 60, // More tilted for better perspective
+        pitch: 60,
         interactive: false,
         attributionControl: false,
       });
@@ -41,7 +41,7 @@ export default function BackgroundMap() {
       map.current.on('load', () => {
         if (!map.current) return;
 
-        // Add a marker for SCU
+        // scu
         new mapboxgl.Marker({
           color: "#dc2626",
           scale: 0.8
@@ -49,7 +49,7 @@ export default function BackgroundMap() {
           .setLngLat(SCU_COORDINATES)
           .addTo(map.current);
 
-        // Add a subtle highlight around SCU
+
         map.current.addSource('scu-area', {
           type: 'geojson',
           data: {
@@ -78,7 +78,7 @@ export default function BackgroundMap() {
           }
         });
 
-        // Start the animation loop
+
         animate();
       });
     } catch (error) {
@@ -90,19 +90,16 @@ export default function BackgroundMap() {
 
       try {
         time.current += ANIMATION_SPEED;
-        
-        // Create a more gentle figure-8 pattern
+
         const targetX = Math.sin(time.current) * Math.cos(time.current * 0.5) * MOVEMENT_RANGE;
         const targetY = Math.sin(time.current * 0.7) * MOVEMENT_RANGE;
 
-        // Apply spring physics
         const springForceX = (targetX - velocity.current.x) * SPRING_STRENGTH;
         const springForceY = (targetY - velocity.current.y) * SPRING_STRENGTH;
 
         velocity.current.x += springForceX;
         velocity.current.y += springForceY;
 
-        // Apply damping
         velocity.current.x *= DAMPING;
         velocity.current.y *= DAMPING;
 
@@ -110,8 +107,7 @@ export default function BackgroundMap() {
         const newLat = SCU_COORDINATES[1] - velocity.current.y;
 
         map.current.setCenter([newLng, newLat]);
-        
-        // Slowly rotate the bearing for added effect
+
         const currentBearing = map.current.getBearing();
         map.current.setBearing(currentBearing + 0.02);
       } catch (error) {
@@ -134,14 +130,14 @@ export default function BackgroundMap() {
 
   return (
     <div className="absolute inset-0 w-full h-full">
-      <div 
-        ref={mapContainer} 
+      <div
+        ref={mapContainer}
         className="absolute inset-0 w-full h-full"
-        style={{ 
+        style={{
           opacity: 0.85,
           filter: 'saturate(0.9) brightness(1.1)',
         }}
       />
     </div>
   );
-} 
+}

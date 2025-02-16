@@ -91,15 +91,18 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                   {filteredPosts.map((post) => (
                     <div
                       key={post.id}
-                      className="p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
+                      className={`p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer ${post.distance < 0.5 ? 'bg-red-100' : post.distance < 1 ? 'bg-orange-100' : post.distance < 2 ? 'bg-yellow-100' : post.distance < 5 ? 'bg-green-100' : 'bg-blue-100'}`}
                       onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                     >
-                      <p className="text-sm text-gray-900">
-                        {post.title} 
-                      </p>
-                      <p className="text-sm text-gray-900">
-                        {post.distance && post.distance < 1 ? `${(post.distance * 5280).toFixed(0)}ft` : `${post.distance?.toFixed(2)}mi`}
-                      </p>
+                      <div className="flex justify-between items-center">
+                        <p className="text-sm text-gray-900 flex-1">
+                          {post.title}
+                        </p>
+                        <p className="text-sm text-gray-900 ml-2">
+                          {post.distance && post.distance < 1 ? `${(post.distance * 5280).toFixed(0)}ft` : `${post.distance?.toFixed(2)}mi`}
+                        </p>
+                      </div>
+                      <hr className="my-1 border-t border-gray-200 w-full" />
                     </div>
                   ))}
                 </div>
