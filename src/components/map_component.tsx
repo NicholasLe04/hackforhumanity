@@ -55,7 +55,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
     // marker for each post based on their lat lon
     posts.forEach((post) => {
       if (post.latitude && post.longitude) {
-        const marker = new mapboxgl.Marker({ color: "red" })
+        const marker = new mapboxgl.Marker({ color: post.urgency.toLowerCase() })
           .setLngLat([post.longitude, post.latitude])
           .addTo(mapInstance.current!);
 
