@@ -94,7 +94,12 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                       className="p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
                       onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                     >
-                      <p className="text-sm text-gray-900">{post.title}</p>
+                      <p className="text-sm text-gray-900">
+                        {post.title} 
+                      </p>
+                      <p className="text-sm text-gray-900">
+                        {post.distance && post.distance < 1 ? `${(post.distance * 5280).toFixed(0)}ft` : `${post.distance?.toFixed(2)}mi`}
+                      </p>
                     </div>
                   ))}
                 </div>
