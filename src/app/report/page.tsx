@@ -160,7 +160,7 @@ export default function ReportPage() {
               <SelectTrigger>
                 <SelectValue placeholder="Select location type" />
               </SelectTrigger>
-              <SelectContent >
+              <SelectContent className="text-black bg-white">
                 <SelectItem value="auto">Use Current Location</SelectItem>
                 <SelectItem value="manual">Enter Coordinates Manually</SelectItem>
                 <SelectItem value="address">Enter Address</SelectItem>
