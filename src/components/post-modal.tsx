@@ -17,7 +17,7 @@ export default function PostModal({ post, onClose }: PostModalProps) {
 
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${post.latitude}&lon=${post.longitude}&zoom=18&addressdetails=1`,
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${post.latitude}&lon=${post.longitude}&zoom=20&addressdetails=1`,
           {
             headers: {
               'Accept-Language': 'en-US,en;q=0.9',
