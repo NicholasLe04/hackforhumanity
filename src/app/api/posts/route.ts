@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const author_id = formData.get("author_id") as string;
+    const title = formData.get("title") as string;
     const latitude = formData.get("latitude") as string;
     const longitude = formData.get("longitude") as string;
     const description = formData.get("description") as string;
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
       .from("posts")
       .insert({
         author_id: author_id,
+        title: title,
         latitude: parseFloat(latitude),
         longitude: parseFloat(longitude),
         description: description
