@@ -48,15 +48,25 @@ export default function PostModal({ post, onClose }: PostModalProps) {
       />
       
       {/* Modal */}
-      <div className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200/20 p-6 max-w-lg w-full mx-4 z-10">
+      <div className="relative bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200/20 p-6 max-w-4xl w-full mx-4 z-10 max-h-[90vh] overflow-y-auto">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-xl transition-colors"
+          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-xl transition-colors z-10"
         >
           <X size={20} />
         </button>
 
         <div className="space-y-6">
+          {/* Image Section */}
+          <div className="flex justify-center rounded-xl overflow-hidden bg-gray-100 -mt-2">
+            <img
+              src={post.imageUrl}
+              alt={post.title}
+              className="max-w-full max-h-[70vh] rounded-xl object-contain"
+              style={{ width: 'auto', height: 'auto' }}
+            />
+          </div>
+
           <div className="grid grid-cols-[80px_1fr] items-baseline gap-4">
             <p className="text-sm font-medium text-gray-500">Title</p>
             <h2 className="text-2xl font-bold text-gray-900">{post.title}</h2>

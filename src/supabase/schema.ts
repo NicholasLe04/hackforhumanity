@@ -6,4 +6,5 @@ export type Post = {
   latitude: number
   longitude: number
   description: string
+  imageUrl?: string
 }
