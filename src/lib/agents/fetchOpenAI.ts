@@ -56,7 +56,7 @@ export async function filterMe(apiKey: string, context: string, image: File | Bl
   const requestBody = {
     model: "gpt-4-turbo",
     messages: await createMessages(
-      "Describe the image. IMPORTANT: IF THIS IMAGE DOES NOT DESCRIBE A THREAT OR DANGER TO PEOPLE, YOU SHOULD RESPOND WITH 'NO DANGER DETECTED'",
+      "You are an image analyst and your job is analyze and describe images.",
       `First, state context in form Context: context. Then, state Image description as Image Description: You are to harvest valuable image from this photo. Only filter out information from this photo that is relevant to dangers, threats, dangerous people, or disasters and may pose harmful or risky to humans. Explicitly list off the dangers in your string response. For example, you would not mention key information such as puppy, roses, or chairs, but would instead retain information such as downed power lines, fires, dangerous people, criminals, illegal activity that is a safety issue to people, harassment, and smoke. Do not state additional information if not relevant. You should not elaborate further if you do not detect harmful material or people. Only elaborate on potentially harmful data. Answers should be incredibly detailed. \n CONTEXT: ${context}`,
       image
     )
@@ -72,10 +72,10 @@ export async function classifyMe(apiKey: string, context: string) {
     messages: await createMessages(
       `Categorize urgency in JSON format. Follow the provided template: \n
       "classify": {
-        "urgency": STRING (Red, Yellow, Green) [Red = Most severe, Green = most positive],
+        "urgency": STRING (Red, Orange, Yellow) [Red = Most severe, Yellow = least severe],
         "radius": FLOAT (Units: Miles),
       }`,
-      `You should now categorize this information in tiers of urgency, describing how urgent a response would be to this scenario. If the text provided sounds incredibly dangerous, give red. If semi-dangerous, give yellow. If not dangerous at all, give green. Here is the text you should analyze: ${context}`
+      `You should now categorize this information in tiers of urgency, describing how urgent a response would be to this scenario. If the text provided sounds incredibly dangerous, give red. If semi-dangerous, give Orange. If little to no danger, give Yellow. Here is the text you should analyze: ${context}`
     )
   };
 

@@ -27,11 +27,6 @@ export async function POST(req: NextRequest) {
 
     const analysis_json = JSON.parse(merge_response.split('\n').slice(1, -1).join('\n'));
 
-    // DONT ADD IF NOT THREAT
-    if (analysis_json.classify.urgency === "Green") {
-      return NextResponse.json({ message: "No Danger Detected" }, { status: 200 });
-    }
-
     // Insert post data into Supabase
     const { data: postData, error: postError } = await supabase
       .from("posts")
