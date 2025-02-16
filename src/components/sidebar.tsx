@@ -21,12 +21,29 @@ interface SidebarProps {
 export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentClick }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts)
+  const [searchMode, setSearchMode] = useState("text") // "text" or "radius"
+  const [radius, setRadius] = useState("")
   const { user } = useAuthContext() as { user: User | null }
 
   useEffect(() => {
-    const newFilteredPosts = posts.filter((post) => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
-    setFilteredPosts(newFilteredPosts)
-  }, [searchQuery, posts])
+    if (searchMode === "text") {
+      const newFilteredPosts = posts.filter((post) =>
+        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      setFilteredPosts(newFilteredPosts)
+    } else if (searchMode === "radius") {
+      const radiusVal = parseFloat(radius)
+      if (!isNaN(radiusVal)) {
+        const newFilteredPosts = posts.filter(
+          (post) => post.distance !== undefined && post.distance <= radiusVal
+        )
+        setFilteredPosts(newFilteredPosts)
+      } else {
+        // no valid radius
+        setFilteredPosts([])
+      }
+    }
+  }, [searchQuery, posts, searchMode, radius])
 
   return (
     <div
@@ -72,23 +89,53 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
         <div className="flex-1 flex flex-col min-h-0">
           {isExpanded && (
             <>
-              {/* Search bar */}
+              {/* search dropdown mode */}
               <div className="relative mb-3">
-                <input
-                  type="text"
-                  placeholder="Search location..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full p-1.5 pr-8 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
-                />
-                <Search className="absolute right-2 top-2 text-gray-400" size={16} />
+                <select
+                  value={searchMode}
+                  onChange={(e) => {
+                    setSearchMode(e.target.value)
+
+                    // reset queries
+                    setSearchQuery("")
+                    setRadius("")
+                  }}
+                  className="w-full p-1.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
+                >
+                  <option value="text">Search posts</option>
+                  <option value="radius">Search by Radius (miles)</option>
+                </select>
               </div>
 
+              {/* search input */}
+              {searchMode === "text" && (
+                <div className="relative mb-3">
+                  <input
+                    type="text"
+                    placeholder="Search incidents..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full p-1.5 pr-8 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
+                  />
+                  <Search className="absolute right-2 top-2 text-gray-400" size={16} />
+                </div>
+              )}
 
+              {searchMode === "radius" && (
+                <div className="relative mb-3">
+                  <input
+                    type="number"
+                    placeholder="Enter radius in miles"
+                    value={radius}
+                    onChange={(e) => setRadius(e.target.value)}
+                    className="w-full p-1.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
+                  />
+                </div>
+              )}
                 {/* Recent Incidents */}
                 <div className="flex-1 overflow-hidden">
                   <h2 className="text-base font-semibold text-gray-900 mb-2">Recent Incidents</h2>
-                  <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-220px)] pb-4">
+                  <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-220px)] pb-6 pr-2">
                     {filteredPosts.map((post) => {
                       const urgencyBgColor =
                         post.urgency === 'Red'
@@ -97,12 +144,12 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                           ? 'border-yellow-500'
                           : post.urgency === 'Green'
                           ? 'border-green-500'
-                          : 'border-blue-500';
+                          : 'border-blue-500'
 
                       const distanceText =
                         post.distance && post.distance < 1
                           ? `${(post.distance * 5280).toFixed(0)}ft`
-                          : `${post.distance?.toFixed(2)}mi`;
+                          : `${post.distance?.toFixed(2)}mi`
 
                       return (
                         <div
@@ -129,15 +176,11 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                             </div>
                           </div>
                         </div>
-
-
-
-
-
-                    );
-                  })}
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
+
             </>
           )}
         </div>
@@ -148,14 +191,10 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
               {isExpanded && (
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                  <Avatar
-                    className={`transition-all duration-500 ${
-                      !isExpanded ? "h-10 w-10" : ""
-                    }`}
-                  >
-                    <AvatarImage className="rounded-full" src={user.user_metadata.avatar_url} />
-                    <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
-                  </Avatar>
+                    <Avatar className={`transition-all duration-500 ${!isExpanded ? "h-10 w-10" : ""}`}>
+                      <AvatarImage className="rounded-full" src={user.user_metadata.avatar_url} />
+                      <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                    </Avatar>
                   </div>
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-900">{user.email?.split("@")[0]}</span>
@@ -169,7 +208,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                 onClick={signOut}
                 className={`${isExpanded ? "hover:bg-red-50 hover:text-red-600 rounded-full" : "w-8 h-8 p-0 hover:bg-red-50 hover:text-red-600 rounded-full"}`}
               >
-                <LogOut size={16} className="text-black"/>
+                <LogOut size={16} className="text-black" />
               </Button>
             </div>
           ) : isExpanded ? (
