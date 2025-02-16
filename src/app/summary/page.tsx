@@ -52,7 +52,7 @@ const geocodeAddress = async (address: string) => {
 
 export default function ReportPage() {
   const { user, loading } = useAuthContext();
-
+  
   const [radius, setRadius] = useState<number>(5)
   const [locationType, setLocationType] = useState<"auto" | "manual" | "address">("auto")
   const [lat, setLat] = useState<string>("")
