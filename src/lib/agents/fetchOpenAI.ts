@@ -1,3 +1,5 @@
+import { Post } from "@/supabase/schema";
+
 type MessageContent =
   | { type: "text"; text: string }
   | { type: "image_url"; image_url: { url: string } };
@@ -50,8 +52,8 @@ async function createMessages(systemText: string, userText: string, file?: File 
   return messages;
 }
 
-// filterMe - Filters images for disaster-related content
-export async function filterMe(apiKey: string, context: string, image: File | Blob) {
+// agentFilter - Filters images for disaster-related content
+export async function agentFilter(apiKey: string, context: string, image: File | Blob) {
   console.log(context);
   const requestBody = {
     model: "gpt-4-turbo",
@@ -65,8 +67,8 @@ export async function filterMe(apiKey: string, context: string, image: File | Bl
   return openAIComplete(apiKey, requestBody);
 }
 
-// classifyMe - Categorizes urgency of a given context
-export async function classifyMe(apiKey: string, context: string) {
+// agentClassify - Categorizes urgency of a given context
+export async function agentClassify(apiKey: string, context: string) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
@@ -82,8 +84,8 @@ export async function classifyMe(apiKey: string, context: string) {
   return openAIComplete(apiKey, requestBody);
 }
 
-// warnMe - Provides warnings based on urgency level
-export async function warnMe(apiKey: string, context: string) {
+// agentGenerateWarnings - Provides warnings based on urgency level
+export async function agentGenerateWarnings(apiKey: string, context: string) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
@@ -99,8 +101,8 @@ export async function warnMe(apiKey: string, context: string) {
   return openAIComplete(apiKey, requestBody);
 }
 
-// summarizeMe - Provides warnings based on urgency level
-export async function summarizeMe(apiKey: string, context: string) {
+// agentSummarize - Provides warnings based on urgency level
+export async function agentSummarize(apiKey: string, context: string) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
@@ -116,13 +118,26 @@ export async function summarizeMe(apiKey: string, context: string) {
   return openAIComplete(apiKey, requestBody);
 }
 
-// mergeMe - Merges JSON objects
-export async function mergeMe(apiKey: string, summary: string, warn: string, classify: string) {
+// agentMergeJSON - Merges JSON objects
+export async function agentMergeJSON(apiKey: string, summary: string, warn: string, classify: string) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
       "Merge the following JSON files into one singular JSON. Do not delete any data.",
       `JSONs: ${summary}, ${warn}, ${classify}`
+    )
+  };
+
+  return openAIComplete(apiKey, requestBody);
+}
+
+
+export async function agentGenerateReport(apiKey: string, localPosts: Post[]) {
+  const requestBody = {
+    model: "gpt-4o",
+    messages: await createMessages(
+      "You are a professional city hazard analyst. Your job is look at the local urban hazard reports in your city and generate a full detailed hazard report for your city. It should be broken up into sections with professional language.",
+      `Recent Urban Hazards and Reports in your city: ${JSON.stringify(localPosts)}`
     )
   };
 

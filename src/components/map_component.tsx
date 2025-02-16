@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Post } from "@/supabase/schema";
-import { Home, AlertTriangle, Eye, EyeOff } from "lucide-react";
+import { Home, AlertTriangle, Eye, EyeOff, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PersonIcon from "../../public/person-icon.svg";
@@ -311,6 +311,12 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
         <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
           <Link href="/report">
             <AlertTriangle className="h-5 w-5 text-red-600" />
+          </Link>
+        </Button>
+        <div className="w-[1px] bg-gray-200 my-2" />
+        <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
+          <Link href="/summary">
+            <FileText className="h-5 w-5 text-red-600" />
           </Link>
         </Button>
       </div>
