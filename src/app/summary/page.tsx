@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { Loader2, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import toast from "react-hot-toast"
 import signInWithGoogle from "@/supabase/auth/signIn";
+import debounce from "lodash.debounce"
 
 import { useAuthContext } from "@/context/AuthContext"
 import MockReport from "@/app/summary/mock-summary"
@@ -68,6 +69,25 @@ export default function ReportPage() {
   >([])
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  const debouncedGeocodeAddress = useCallback(
+    debounce(async (value) => {
+      if (value) {
+        const results = await geocodeAddress(value)
+        if (results && results.length > 0) {
+          setAddressResults(results)
+        }
+      } else {
+        setAddressResults([])
+      }
+    }, 300),
+    [],
+  )
+
+  useEffect(() => {
+    debouncedGeocodeAddress(address)
+    return () => debouncedGeocodeAddress.cancel()
+  }, [address, debouncedGeocodeAddress])
 
   // If locationType = auto, get geolocation (unconditional)
   useEffect(() => {
