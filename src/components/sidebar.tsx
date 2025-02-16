@@ -43,7 +43,6 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
         <div className={`flex items-center h-auto justify-between ${isExpanded ? "mb-3" : "mb-3 flex-col gap-3"}`}>
           {isExpanded ? (
             <Link href="/" className="flex items-center justify-center group">
-              <AlertTriangle className="h-5 w-5 text-red-600 group-hover:text-red-700 transition-colors" />
               <span className="ml-2 text-xl font-bold text-black">
                 <span className="relative">
                   lmk
@@ -53,7 +52,12 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
             </Link>
           ) : (
             <Link href="/" className="flex items-center justify-center group">
-              <AlertTriangle className="h-5 w-5 text-red-600 group-hover:text-red-700 transition-colors" />
+              <span className="px-auto text-md font-bold text-black">
+                <span className="relative">
+                  lmk
+                  <span className="absolute bottom-0 left-0 w-full h-[3px] bg-red-600 group-hover:bg-red-700 transform -rotate-2 transition-colors"></span>
+                </span>
+              </span>
             </Link>
           )}
           <button
@@ -127,7 +131,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                 onClick={signOut}
                 className={`${isExpanded ? "hover:bg-red-50 hover:text-red-600 rounded-full" : "w-8 h-8 p-0 hover:bg-red-50 hover:text-red-600 rounded-full"}`}
               >
-                <LogOut size={16} />
+                <LogOut size={16} className="text-black"/>
               </Button>
             </div>
           ) : isExpanded ? (
