@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, Menu, X, LogOut, AlertTriangle } from 'lucide-react'
+import { Search, Menu, X, LogOut, AlertTriangle, ChevronDown } from 'lucide-react'
 import type { User } from "@supabase/supabase-js"
 import { useAuthContext } from "@/context/AuthContext"
 import signInWithGoogle from "@/supabase/auth/signIn"
@@ -97,11 +97,15 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                     setSearchQuery("")
                     setRadius("")
                   }}
-                  className="w-full p-1.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
+                  className="w-full appearance-none bg-white text-gray-800 py-2 px-4 pr-8 rounded-lg border border-gray-200 shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-200 ease-in-out"
                 >
-                  <option value="text">Search posts</option>
+                  <option value="text">Search by Name</option>
                   <option value="radius">Search by Radius (miles)</option>
                 </select>
+                <ChevronDown
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"
+                  size={18}
+                />
               </div>
 
               {/* search input */}
