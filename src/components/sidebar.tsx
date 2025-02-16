@@ -39,7 +39,6 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
         )
         setFilteredPosts(newFilteredPosts)
       } else {
-        // no valid radius
         setFilteredPosts([])
       }
     }
@@ -95,8 +94,6 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                   value={searchMode}
                   onChange={(e) => {
                     setSearchMode(e.target.value)
-
-                    // reset queries
                     setSearchQuery("")
                     setRadius("")
                   }}
@@ -132,55 +129,55 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                   />
                 </div>
               )}
-                {/* Recent Incidents */}
-                <div className="flex-1 overflow-hidden">
-                  <h2 className="text-base font-semibold text-gray-900 mb-2">Recent Incidents</h2>
-                  <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-220px)] pb-6 pr-2">
-                    {filteredPosts.map((post) => {
-                      const urgencyBgColor =
-                        post.urgency === 'Red'
-                          ? 'border-red-500'
-                          : post.urgency === 'Yellow'
-                          ? 'border-yellow-500'
-                          : post.urgency === 'Green'
-                          ? 'border-green-500'
-                          : 'border-blue-500'
 
-                      const distanceText =
-                        post.distance && post.distance < 1
-                          ? `${(post.distance * 5280).toFixed(0)}ft`
-                          : `${post.distance?.toFixed(2)}mi`
+              {/* Recent Incidents */}
+              <div className="flex-1 overflow-hidden flex flex-col">
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Recent Incidents</h2>
+                <div className="flex-1 space-y-1.5 overflow-y-auto pb-4">
+                  {filteredPosts.map((post) => {
+                    const urgencyBgColor =
+                      post.urgency === 'Red'
+                        ? 'border-red-500'
+                        : post.urgency === 'Yellow'
+                        ? 'border-yellow-500'
+                        : post.urgency === 'Green'
+                        ? 'border-green-500'
+                        : 'border-blue-500'
 
-                      return (
-                        <div
-                          key={post.id}
-                          className={`p-2 rounded-xl transition-colors border border-gray-200/10 shadow-sm cursor-pointer
-                            ${post.urgency === 'Red'
-                              ? 'bg-red-200 hover:bg-red-500'
-                              : post.urgency === 'Yellow'
-                              ? 'bg-yellow-400 hover:bg-yellow-600'
-                              : post.urgency === 'Green'
-                              ? 'bg-green-200 hover:bg-green-400'
-                              : 'bg-blue-200 hover:bg-blue-400'}`}
-                          onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
-                        >
+                    const distanceText =
+                      post.distance && post.distance < 1
+                        ? `${(post.distance * 5280).toFixed(0)}ft`
+                        : `${post.distance?.toFixed(2)}mi`
+
+                    return (
+                      <div
+                        key={post.id}
+                        className={`p-2 rounded-xl transition-colors border border-gray-200/10 shadow-sm cursor-pointer
+                          ${post.urgency === 'Red'
+                            ? 'bg-red-200 hover:bg-red-500'
+                            : post.urgency === 'Yellow'
+                            ? 'bg-yellow-400 hover:bg-yellow-600'
+                            : post.urgency === 'Green'
+                            ? 'bg-green-200 hover:bg-green-400'
+                            : 'bg-blue-200 hover:bg-blue-400'}`}
+                        onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
+                      >
+                        <div className="flex items-center">
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-900 break-words">
+                              {post.title}
+                            </p>
+                          </div>
                           <div className="flex items-center">
-                            <div className="flex-1">
-                              <p className="text-sm text-gray-900 break-words">
-                                {post.title}
-                              </p>
-                            </div>
-                            <div className="flex items-center">
-                              <div className={`border-l-2 h-6 ${urgencyBgColor} mx-2`}></div>
-                              <p className="text-sm text-gray-900">{distanceText}</p>
-                            </div>
+                            <div className={`border-l-2 h-6 ${urgencyBgColor} mx-2`}></div>
+                            <p className="text-sm text-gray-900">{distanceText}</p>
                           </div>
                         </div>
-                      )
-                    })}
-                  </div>
+                      </div>
+                    )
+                  })}
                 </div>
-
+              </div>
             </>
           )}
         </div>
