@@ -5,6 +5,7 @@ import { AlertTriangle } from "lucide-react";
 import { useState, useEffect } from "react";
 import Map from "@/components/map_component";
 import Sidebar from "@/components/sidebar";
+import PostModal from "@/components/post-modal";
 import { checkAuthStatus } from "@/app/utils/auth";
 import signInWithGoogle from "@/supabase/auth/signIn";
 import { useRouter } from "next/navigation";
@@ -15,6 +16,7 @@ export default function MapPage() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const router = useRouter();
 
   const handleReportClick = async (e: React.MouseEvent) => {
@@ -69,7 +71,11 @@ export default function MapPage() {
         />
       </div>
       <div className="absolute inset-0">
-        <Map posts={posts} selectedLocation={selectedLocation} />
+        <Map 
+          posts={posts} 
+          selectedLocation={selectedLocation}
+          onMarkerClick={setSelectedPost}
+        />
       </div>
       <Button 
         onClick={handleReportClick} 
@@ -78,6 +84,7 @@ export default function MapPage() {
         <AlertTriangle className="h-5 w-5 text-white group-hover:rotate-12 transition-transform duration-300" />
         <span className="sr-only">Report an incident</span>
       </Button>
+      <PostModal post={selectedPost} onClose={() => setSelectedPost(null)} />
     </div>
   );
 }

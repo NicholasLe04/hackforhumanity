@@ -12,9 +12,10 @@ const DEFAULT_CENTER: [number, number] = [-73.9855, 40.7484]; // Empire State Bu
 interface MapProps {
   posts: Post[];
   selectedLocation: [number, number] | null;
+  onMarkerClick?: (post: Post) => void;
 }
 
-export default function Map({ posts, selectedLocation }: MapProps) {
+export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<mapboxgl.Map | null>(null);
   const markerInstances = useRef<mapboxgl.Marker[]>([]);
@@ -54,6 +55,11 @@ export default function Map({ posts, selectedLocation }: MapProps) {
         const marker = new mapboxgl.Marker({ color: "red" })
           .setLngLat([post.longitude, post.latitude])
           .addTo(mapInstance.current!);
+
+        // Add click handler to marker
+        marker.getElement().addEventListener('click', () => {
+          onMarkerClick?.(post);
+        });
 
         markerInstances.current.push(marker);
       }
@@ -105,7 +111,7 @@ export default function Map({ posts, selectedLocation }: MapProps) {
       window.removeEventListener("resize", resizeMap);
       cleanupMap();
     };
-  }, [posts]);
+  }, [posts, onMarkerClick]);
 
   useEffect(() => {
     if (userLocation && mapInstance.current && userMarkerInstance.current) {
