@@ -182,15 +182,15 @@ export default function ReportPage() {
       {/* Left Column - Form */}
       <div className="w-full md:w-1/2 p-8 lg:p-12 xl:p-16 overflow-y-auto">
         <nav className="mb-12">
-          <Button variant="ghost" asChild className="hover:bg-gray-50 rounded-full transition-all group">
-            <Link href="/map" className="flex items-center text-gray-600 hover:text-gray-900">
+          <Button variant="ghost" asChild className="hover:bg-red-50 rounded-full transition-all group">
+            <Link href="/map" className="flex items-center text-gray-600 hover:text-red-600">
               <ChevronDown className="mr-2 h-4 w-4 rotate-90 transition-transform group-hover:-translate-x-1" />
               Back to Map
             </Link>
           </Button>
         </nav>
 
-        <h1 className="text-4xl font-bold mb-12 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-12 bg-gradient-to-r from-red-600 via-red-500 to-red-400 bg-clip-text text-transparent">
           Report an Incident
         </h1>
 
@@ -206,7 +206,7 @@ export default function ReportPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter incident title"
-              className="rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all placeholder:text-gray-300"
+              className="rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all placeholder:text-gray-300 text-gray-900 font-medium"
             />
           </div>
 
@@ -220,7 +220,7 @@ export default function ReportPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe incident..."
-              className="h-32 rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all resize-none placeholder:text-gray-300"
+              className="h-32 rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all resize-none placeholder:text-gray-300 text-gray-900 font-medium"
             />
           </div>
 
@@ -235,13 +235,13 @@ export default function ReportPage() {
                 setLocationType(value)
               }
             >
-              <SelectTrigger className="rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all">
-                <SelectValue />
+              <SelectTrigger className="rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all text-gray-900 font-medium">
+                <SelectValue placeholder="Select location type" />
               </SelectTrigger>
-              <SelectContent className="text-gray-700 bg-white rounded-2xl border-gray-200 shadow-lg">
-                <SelectItem value="auto">Use Current Location</SelectItem>
-                <SelectItem value="manual">Enter Coordinates Manually</SelectItem>
-                <SelectItem value="address">Enter Address</SelectItem>
+              <SelectContent className="text-gray-900 bg-white rounded-2xl border-gray-200 shadow-lg">
+                <SelectItem value="auto" className="focus:bg-red-50 font-medium">Use Current Location</SelectItem>
+                <SelectItem value="manual" className="focus:bg-red-50 font-medium">Enter Coordinates Manually</SelectItem>
+                <SelectItem value="address" className="focus:bg-red-50 font-medium">Enter Address</SelectItem>
               </SelectContent>
             </Select>
 
@@ -252,62 +252,86 @@ export default function ReportPage() {
                   value={lat}
                   onChange={(e) => setLat(e.target.value)}
                   placeholder="Latitude"
-                  className="rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all placeholder:text-gray-300"
+                  className="rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all placeholder:text-gray-300 text-gray-900 font-medium"
                 />
                 <Input
                   type="text"
                   value={lon}
                   onChange={(e) => setLon(e.target.value)}
                   placeholder="Longitude"
-                  className="rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all placeholder:text-gray-300"
+                  className="rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all placeholder:text-gray-300 text-gray-900 font-medium"
                 />
               </div>
             )}
 
             {locationType === "address" && (
               <div className="space-y-3 mt-3">
-                <Input
-                  type="text"
-                  value={address}
-                  onChange={(e) => {
-                    setAddress(e.target.value);
-                    setLat("");
-                    setLon("");
-                    setAddressResults([]);
-                    setSelectedAddress(null);
-                  }}
-                  placeholder="Enter address (e.g., 123 Main St, City, State)"
-                  className="rounded-2xl border-gray-200 focus:border-gray-400 focus:ring-gray-400 transition-all placeholder:text-gray-300"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full mt-2 rounded-2xl border-gray-200 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 transition-all"
-                  onClick={async () => {
-                    if (address) {
-                      const results = await geocodeAddress(address);
-                      if (results && results.length > 0) {
-                        setAddressResults(results);
+                <div className="relative flex items-center">
+                  <Input
+                    type="text"
+                    value={address}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                      setLat("");
+                      setLon("");
+                      setAddressResults([]);
+                      setSelectedAddress(null);
+                    }}
+                    onKeyDown={async (e) => {
+                      if (e.key === 'Enter' && address) {
+                        e.preventDefault();
+                        const results = await geocodeAddress(address);
+                        if (results && results.length > 0) {
+                          setAddressResults(results);
+                        }
                       }
-                    }
-                  }}
-                >
-                  Search Address
-                </Button>
+                    }}
+                    placeholder="Enter address (e.g., 123 Main St, City, State)"
+                    className="rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all placeholder:text-gray-300 text-gray-900 font-medium pr-16"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    className="absolute right-2 h-10 w-10 rounded-full hover:bg-red-50 hover:text-red-600 transition-all"
+                    onClick={async () => {
+                      if (address) {
+                        const results = await geocodeAddress(address);
+                        if (results && results.length > 0) {
+                          setAddressResults(results);
+                        }
+                      }
+                    }}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5"
+                    >
+                      <circle cx="11" cy="11" r="8" />
+                      <path d="m21 21-4.3-4.3" />
+                    </svg>
+                  </Button>
+                </div>
 
                 {addressResults.length > 0 && (
                   <div className="mt-4 space-y-3">
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-900">
                       Select the correct address:
                     </p>
-                    <div className="space-y-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-200 scrollbar-track-transparent">
+                    <div className="space-y-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-red-200 scrollbar-track-transparent">
                       {addressResults.map((result, index) => (
                         <div
                           key={index}
                           className={`p-4 rounded-2xl border transition-all cursor-pointer ${
                             selectedAddress === index
-                              ? "bg-gray-50 border-gray-300 shadow-sm"
-                              : "hover:bg-gray-50 border-gray-200"
+                              ? "bg-red-50 border-red-200 shadow-sm"
+                              : "hover:bg-red-50/50 border-gray-200"
                           }`}
                           onClick={() => {
                             setSelectedAddress(index);
@@ -315,10 +339,10 @@ export default function ReportPage() {
                             setLon(result.lon);
                           }}
                         >
-                          <p className="text-sm font-medium text-gray-700">
+                          <p className="text-sm font-medium text-gray-900">
                             {result.displayName}
                           </p>
-                          <p className="text-xs text-gray-400 mt-1">
+                          <p className="text-xs text-gray-500 mt-1">
                             Type: {result.type}
                           </p>
                         </div>
@@ -328,11 +352,11 @@ export default function ReportPage() {
                 )}
 
                 {selectedAddress !== null && lat && lon && (
-                  <div className="mt-3 text-sm text-gray-600 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                    <p className="font-medium">
+                  <div className="mt-3 text-sm bg-red-50/50 p-4 rounded-2xl border border-red-100">
+                    <p className="font-medium text-gray-900">
                       Selected Address: {addressResults[selectedAddress].displayName}
                     </p>
-                    <p className="mt-1 text-gray-500">
+                    <p className="mt-1 text-gray-700">
                       Coordinates: {lat}, {lon}
                     </p>
                   </div>
@@ -341,10 +365,12 @@ export default function ReportPage() {
             )}
 
             {locationType === "auto" && (
-              <div className="mt-3 text-sm text-gray-600 bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                {lat && lon
-                  ? `Current location: ${lat}, ${lon}`
-                  : "Fetching location..."}
+              <div className="mt-3 text-sm bg-red-50/50 p-4 rounded-2xl border border-red-100">
+                <p className="text-gray-900 font-medium">
+                  {lat && lon
+                    ? `Current location: ${lat}, ${lon}`
+                    : "Fetching location..."}
+                </p>
               </div>
             )}
           </div>
@@ -355,7 +381,7 @@ export default function ReportPage() {
             className={`w-full rounded-2xl py-6 font-medium transition-all ${
               isLoading || !selectedImage || (!title && !description) || (!lat && !lon)
                 ? "bg-gray-100 text-gray-400"
-                : "bg-gray-900 hover:bg-gray-800 text-white shadow-lg hover:shadow-xl"
+                : "bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white shadow-lg hover:shadow-xl hover:shadow-red-100"
             }`}
             disabled={
               isLoading ||
@@ -368,7 +394,7 @@ export default function ReportPage() {
           </Button>
           {isLoading && (
             <div className="flex justify-center">
-              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              <Loader2 className="h-6 w-6 animate-spin text-red-500" />
             </div>
           )}
         </form>
@@ -381,14 +407,14 @@ export default function ReportPage() {
           {...getRootProps()}
           className={`w-full h-full flex items-center justify-center border-2 border-dashed rounded-3xl cursor-pointer transition-all ${
             isDragActive
-              ? "border-gray-400 bg-gray-100"
-              : "border-gray-200 hover:border-gray-300 hover:bg-gray-100/50"
+              ? "border-red-400 bg-red-50"
+              : "border-gray-200 hover:border-red-300 hover:bg-red-50/30"
           }`}
         >
           <input {...getInputProps()} />
           {imagePreview ? (
             <div className="flex flex-col items-center gap-6 p-8 w-full">
-              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-lg ring-1 ring-gray-100">
+              <div className="relative w-full max-w-lg aspect-[4/3] rounded-2xl overflow-hidden shadow-lg ring-1 ring-red-100">
                 <Image
                   src={imagePreview}
                   alt="Preview"
@@ -397,14 +423,14 @@ export default function ReportPage() {
                   className="transition-all duration-300 hover:scale-105"
                 />
               </div>
-              <p className="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+              <p className="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-red-100">
                 Drop a new image to replace
               </p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-8 text-center p-12">
-              <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-100 transition-transform hover:scale-105">
-                <MapPin className="h-10 w-10 text-gray-400" />
+              <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-sm border border-red-100 transition-transform hover:scale-105 hover:border-red-200 hover:shadow-md group">
+                <MapPin className="h-10 w-10 text-gray-400 group-hover:text-red-500 transition-colors" />
               </div>
               <div className="max-w-xs">
                 <p className="text-xl font-medium text-gray-700 mb-2">
@@ -413,7 +439,7 @@ export default function ReportPage() {
                 <p className="text-sm text-gray-500 leading-relaxed">
                   Drag and drop your images here, or click to browse
                 </p>
-                <p className="text-xs text-gray-400 mt-4">
+                <p className="text-xs text-red-400 mt-4">
                   Supports JPG, PNG, GIF, WEBP
                 </p>
               </div>
