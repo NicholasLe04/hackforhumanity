@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Post } from "@/supabase/schema";
-import { Home, AlertTriangle } from "lucide-react";
+import { Home, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PersonIcon from "../../public/person-icon.svg";
@@ -26,6 +26,29 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
   const markerInstances = useRef<mapboxgl.Marker[]>([]);
   const userMarkerInstance = useRef<mapboxgl.Marker | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [showCircles, setShowCircles] = useState(true);
+
+  const toggleCircleVisibility = () => {
+    if (!mapInstance.current) return;
+    
+    setShowCircles(!showCircles);
+    
+    // Toggle visibility of warning circles layer
+    mapInstance.current.setLayoutProperty(
+      'warning-circles',
+      'visibility',
+      !showCircles ? 'visible' : 'none'
+    );
+    
+    // Toggle visibility of individual circle fill layers
+    posts.forEach((_, index) => {
+      mapInstance.current!.setLayoutProperty(
+        `circle-fill-${index}`,
+        'visibility',
+        !showCircles ? 'visible' : 'none'
+      );
+    });
+  };
 
   const cleanupMap = () => {
     markerInstances.current.forEach((marker) => marker.remove());
@@ -272,6 +295,17 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
           }}
         >
           <Home className="h-5 w-5 text-red-600" />
+        </Button>
+        <div className="w-[1px] bg-gray-200 my-2" />
+        <Button
+          className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300"
+          onClick={toggleCircleVisibility}
+        >
+          {showCircles ? (
+            <EyeOff className="h-5 w-5 text-red-600" />
+          ) : (
+            <Eye className="h-5 w-5 text-red-600" />
+          )}
         </Button>
         <div className="w-[1px] bg-gray-200 my-2" />
         <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
