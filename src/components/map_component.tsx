@@ -122,7 +122,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
     }
   }, [userLocation]);
 
-  // Add effect to handle selected location changes
+  // jump to incident
   useEffect(() => {
     if (selectedLocation && mapInstance.current) {
       mapInstance.current.flyTo({
@@ -144,7 +144,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
     >
       <div ref={mapContainer} className="w-full h-full" />
 
-      {/* Action Buttons Pill */}
+      {/* action buttons */}
       <div className="absolute top-4 right-6 bg-white rounded-full shadow-lg p-2 flex flex-col gap-2 z-50">
         <Button
           className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300"

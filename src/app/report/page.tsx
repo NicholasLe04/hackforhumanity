@@ -158,7 +158,7 @@ export default function ReportPage() {
       else {
         toast.success("Report successfully submitted!");
       }
-      
+
       // Clear form
       setSelectedImage(null);
       setImagePreview(null);
@@ -220,7 +220,7 @@ export default function ReportPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe incident..."
-              className="h-32 rounded-2xl border-gray-200 focus:border-red-400 focus:ring-red-400/20 transition-all resize-none placeholder:text-gray-300 text-gray-900 font-medium"
+              className="rounded-2xl border-gray-200 focus:border-red-400 placeholder:text-gray-300 text-gray-900"
             />
           </div>
 
@@ -398,7 +398,7 @@ export default function ReportPage() {
             </div>
           )}
         </form>
-       
+
       </div>
 
       {/* Right Column - Image Upload */}
