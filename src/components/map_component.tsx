@@ -4,6 +4,9 @@ import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Post } from "@/supabase/schema";
+import { Home, AlertTriangle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -132,13 +135,38 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
 
   return (
     <div
-      ref={mapContainer}
       style={{
         width: "100%",
         height: "100vh",
         position: "relative",
         backgroundColor: "#f0f0f0",
       }}
-    />
+    >
+      <div ref={mapContainer} className="w-full h-full" />
+      
+      {/* Action Buttons Pill */}
+      <div className="absolute bottom-8 right-8 bg-white rounded-full shadow-lg p-2 flex gap-2 z-50">
+        <Button
+          className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300"
+          onClick={() => {
+            if (userLocation && mapInstance.current) {
+              mapInstance.current.flyTo({
+                center: userLocation,
+                zoom: 15,
+                duration: 2000,
+              });
+            }
+          }}
+        >
+          <Home className="h-5 w-5 text-red-600" />
+        </Button>
+        <div className="w-[1px] bg-gray-200 my-2" />
+        <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
+          <Link href="/report">
+            <AlertTriangle className="h-5 w-5 text-red-600" />
+          </Link>
+        </Button>
+      </div>
+    </div>
   );
 }
