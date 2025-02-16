@@ -150,8 +150,14 @@ export default function ReportPage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      toast.success("Report successfully submitted!");
-
+      const result = await response.json();
+      if (result.message === "No Danger Detected") {
+        toast.error("Report denied.");
+      }
+      else {
+        toast.success("Report successfully submitted!");
+      }
+      
       // Clear form
       setSelectedImage(null);
       setImagePreview(null);
