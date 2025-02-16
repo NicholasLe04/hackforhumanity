@@ -61,8 +61,10 @@ export default function PostModal({ post, onClose }: PostModalProps) {
           {/* Image Section */}
           <div className="flex justify-center rounded-xl overflow-hidden bg-gray-100 -mt-2">
             <Image
-              src={post.imageUrl || "/placeholder.svg"} // idk i just need a placeholder so lint isn't mad
+              src={post.imageUrl || "/placeholder.svg"}
               alt={post.title}
+              width={1920}
+              height={1080}
               className="max-w-full max-h-[70vh] rounded-xl object-contain"
               style={{ width: 'auto', height: 'auto' }}
             />
