@@ -90,7 +90,7 @@ export default function LandingPage() {
                   </span>
                 </h1>
                 <p className="mx-auto max-w-[800px] text-gray-700 md:text-2xl font-medium">
-                  Use AI to report and map urban hazards in real-time. Make your city safer for everyone.
+                  Use AI to report and map urban hazards. Make your city safer for everyone.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -104,7 +104,7 @@ export default function LandingPage() {
               <div className="pt-8 flex items-center justify-center gap-8 text-sm text-gray-500">
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                  Real-time Updates
+                  Context-Aware
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-2 rounded-full bg-blue-500"></div>
@@ -135,7 +135,7 @@ export default function LandingPage() {
               />
               <FeatureCard
                 icon={<MapPin className="h-10 w-10 text-red-600" />}
-                title="Real-Time Hazard Mapping"
+                title="Crowdsourced Hazard Mapping"
                 description="See hazards plotted on an interactive map as they're reported."
               />
               <FeatureCard
@@ -180,7 +180,7 @@ export default function LandingPage() {
                 title="Pedestrians & Cyclists"
                 description="Navigate safer routes and avoid potential dangers."
               />
-              <BeneficiaryCard title="Drivers" description="Receive real-time warnings about road hazards ahead." />
+              <BeneficiaryCard title="Drivers" description="Receive warnings about potential road hazards ahead." />
               <BeneficiaryCard
                 title="City Governments"
                 description="Prioritize maintenance and allocate resources efficiently."

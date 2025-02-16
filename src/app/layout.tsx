@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "LMK - Urban Hazard Reporting",
-  description: "Report and track urban hazards in real-time. Make your community safer by identifying and sharing potential dangers.",
+  description: "Report and track urban hazards. Make your community safer by identifying and sharing potential dangers.",
 };
 
 export default function RootLayout({
