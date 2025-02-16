@@ -293,7 +293,7 @@ export default function ReportPage() {
                     type="button"
                     size="icon"
                     variant="ghost"
-                    className="absolute right-2 h-10 w-10 rounded-full hover:bg-red-50 hover:text-red-600 transition-all"
+                    className="absolute right-2 h-10 w-10 text-red-500 hover:text-red-600 transition-all group"
                     onClick={async () => {
                       if (address) {
                         const results = await geocodeAddress(address);
@@ -308,12 +308,12 @@ export default function ReportPage() {
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="2"
+                      strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="h-5 w-5"
+                      className="h-6 w-6 transition-all duration-200 group-hover:rotate-12 group-hover:scale-125"
                     >
-                      <circle cx="11" cy="11" r="8" />
+                      <circle cx="11" cy="11" r="7" />
                       <path d="m21 21-4.3-4.3" />
                     </svg>
                   </Button>
