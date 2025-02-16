@@ -80,7 +80,7 @@ export default function MapPage() {
       }
     };
     fetchPosts();
-  }, [selectedLocation]);
+  }, []);
 
   return (
     <div className="fixed inset-0 overflow-hidden">
