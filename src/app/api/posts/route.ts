@@ -25,7 +25,12 @@ export async function POST(req: NextRequest) {
     const summary_response = await summarizeMe(OPENAI_API_KEY,filtered_response)
     const merge_response = await mergeMe(OPENAI_API_KEY,summary_response,warn_response,class_response)
 
-    console.log(merge_response);
+    const analysis_json = JSON.parse(merge_response.split('\n').slice(1, -1).join('\n'));
+
+    // DONT ADD IF NOT THREAT
+    if (analysis_json.classify.urgency === "Green") {
+      return NextResponse.json({ message: "No Danger Detected" }, { status: 200 });
+    }
 
     // Insert post data into Supabase
     const { data: postData, error: postError } = await supabase
@@ -35,7 +40,12 @@ export async function POST(req: NextRequest) {
         title: title,
         latitude: parseFloat(latitude),
         longitude: parseFloat(longitude),
-        description: description
+        description: description,
+        summary: analysis_json.summary.description,
+        close_warning: analysis_json.warn.close,
+        far_warning: analysis_json.warn.far,
+        urgency: analysis_json.classify.urgency,
+        radius: analysis_json.classify.radius
       })
       .select();
 
