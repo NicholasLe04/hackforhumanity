@@ -27,15 +27,24 @@ async function makeOpenAIRequest(apiKey: string, requestBody: object) {
 }
 
 // Function to build messages for OpenAI request
-function createMessages(systemText: string, userText: string, imageBase64?: string) {
-  const messages = [{ role: "system", content: systemText }];
-  
+type MessageContent =
+  | { type: "text"; text: string }
+  | { type: "image"; image: { url: string } };
+
+interface Message {
+  role: "system" | "user";
+  content: MessageContent[];
+}
+
+function createMessages(systemText: string, userText: string, imageBase64?: string): Message[] {
+  const messages: Message[] = [{ role: "system", content: [{ type: "text", text: systemText }] }];
+
   if (imageBase64) {
     messages.push({
       role: "user",
       content: [
         { type: "text", text: userText },
-        { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } }
+        { type: "image", image: { url: `data:image/jpeg;base64,${imageBase64}` } }
       ]
     });
   } else {

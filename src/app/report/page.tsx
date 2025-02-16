@@ -9,9 +9,10 @@
   import { Button } from "@/components/ui/button"
   import { Input } from "@/components/ui/input"
   import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-  import { Textarea } from "@/components/ui/textarea" // Import Textarea component
+  import { Textarea } from "@/components/ui/textarea"
   import { useAuthContext } from "@/context/AuthContext"
   import { User } from "@supabase/supabase-js"
+  
 
   const geocodeAddress = async (address: string) => {
     const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
@@ -20,7 +21,7 @@
       const response = await fetch(endpoint, {
         headers: {
           'Accept-Language': 'en-US,en;q=0.9',
-          'User-Agent': 'hackforhumanity-app' // Required by Nominatim ToS
+          'User-Agent': 'hackforhumanity-app'
         }
       });
       const data = await response.json();
@@ -59,6 +60,7 @@
       importance: number;
     }>>([])
     const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
@@ -95,18 +97,34 @@
       // Remove the undefined location variable
       console.log('Submitting:', { selectedImage, description, lat, lon });
 
-      const data = new FormData();
-      data.append("author_id", user.id);
-      data.append("title", title);
-      data.append("longitude", lon);
-      data.append("latitude", lat);
-      data.append("description", description);
-      data.append("image", selectedImage as File);
-
-      await fetch('/api/posts', {
-        method: 'POST',
-        body: data
-      })
+      try {
+        const data = new FormData();
+        data.append("author_id", user.id);
+        data.append("title", title);
+        data.append("longitude", lon);
+        data.append("latitude", lat);
+        data.append("description", description);
+        data.append("image", selectedImage as File);
+  
+        await fetch('/api/posts', {
+          method: 'POST',
+          body: data
+        });
+  
+        // Clear the form fields
+        setSelectedImage(null);
+        setImagePreview(null);
+        setTitle("");
+        setDescription("");
+        setLocationType("auto");
+        setLat("");
+        setLon("");
+        setAddress("");
+        setAddressResults([]);
+        setSelectedAddress(null);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     return (
@@ -159,11 +177,8 @@
                 Location
               </label>
               <Select
-                id="location"
                 value={locationType}
                 onValueChange={(value: "auto" | "manual" | "address") => setLocationType(value)}
-                placeholder="Select location type"
-                className="border border-gray-300"
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -256,8 +271,8 @@
             </div>
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full rounded-md cursor-pointer" disabled={!selectedImage || (!title && !description) || (!lat && !lon)}>
-              Submit Report
+            <Button type="submit" className="w-full rounded-md cursor-pointer" disabled={isLoading || !selectedImage || (!title && !description) || (!lat && !lon)}>
+              {isLoading ? "Submitting..." : "Submit Report"}
             </Button>
           </form>
         </div>
