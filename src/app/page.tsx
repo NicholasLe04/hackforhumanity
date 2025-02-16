@@ -90,7 +90,7 @@ export default function LandingPage() {
                   </span>
                 </h1>
                 <p className="mx-auto max-w-[800px] text-gray-700 md:text-2xl font-medium">
-                  Use AI to report and map urban hazards. Make your city safer for everyone.
+                  Use AI to report and map hazards. Make your city safer for everyone.
                 </p>
               </div>
               <div className="flex gap-4">
@@ -119,7 +119,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Rest of the sections with semi-transparent backgrounds */}
+
         <section id="features" className="w-full py-12 md:py-24 lg:py-32 relative">
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
           <div className="container mx-auto px-4 md:px-6 relative">
@@ -135,13 +135,13 @@ export default function LandingPage() {
               />
               <FeatureCard
                 icon={<MapPin className="h-10 w-10 text-red-600" />}
-                title="Crowdsourced Hazard Mapping"
+                title="Real-time Report Mapping"
                 description="See hazards plotted on an interactive map as they're reported."
               />
               <FeatureCard
                 icon={<Zap className="h-10 w-10 text-red-600" />}
-                title="Instant Alerts"
-                description="Receive notifications about nearby hazards to stay safe on the go."
+                title="Beautiful Summaries"
+                description="Get beautiful AI-curated summaries from your current location."
               />
             </div>
           </div>
@@ -155,7 +155,7 @@ export default function LandingPage() {
               <StepCard
                 number={1}
                 title="Spot a Hazard"
-                description="See a pothole, broken streetlight, or any urban hazard? Open the app."
+                description="Notice something strange or potentially hazardous? Open the app."
               />
               <StepCard
                 number={2}
@@ -165,7 +165,7 @@ export default function LandingPage() {
               <StepCard
                 number={3}
                 title="Share & Alert"
-                description="The hazard is instantly mapped and shared with other users and city officials."
+                description="The hazard is instantly mapped and shared with other users along with officials."
               />
             </div>
           </div>
@@ -174,20 +174,20 @@ export default function LandingPage() {
         <section id="benefits" className="w-full py-12 md:py-24 lg:py-32 relative">
           <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
           <div className="container mx-auto px-4 md:px-6 relative">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">Perfect For Everyone.</h2>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">Perfect for everyone.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <BeneficiaryCard
-                title="Pedestrians & Cyclists"
-                description="Navigate safer routes and avoid potential dangers."
+                title="Your Neighborhood"
+                description="Stay informed about hazards in your area and contribute to a safer environment."
               />
-              <BeneficiaryCard title="Drivers" description="Receive warnings about potential road hazards ahead." />
+              <BeneficiaryCard title="Emergency Services" description="Enhance response times and situational awareness with real-time hazard information." />
               <BeneficiaryCard
-                title="City Governments"
-                description="Prioritize maintenance and allocate resources efficiently."
+                title="Local Authorities"
+                description="Make data-driven decisions to prioritize safety initiatives and allocate resources effectively."
               />
               <BeneficiaryCard
-                title="Utility Companies"
-                description="Quickly locate and address infrastructure issues."
+                title="Infrastructure Providers"
+                description="Proactively identify and address potential hazards to ensure a safer infrastructure."
               />
             </div>
           </div>

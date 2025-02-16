@@ -136,8 +136,8 @@ export async function agentGenerateReport(apiKey: string, localPosts: Post[]) {
   const requestBody = {
     model: "gpt-4o",
     messages: await createMessages(
-      "You are a professional city hazard analyst. Your job is look at the local urban hazard reports in your city and generate a full detailed hazard report for your city. It should be broken up into sections with professional language.",
-      `Recent Urban Hazards and Reports in your city: ${JSON.stringify(localPosts)}`
+      "You are a professional city hazard analyst. Your job is look at the local hazard reports in your city and generate a full detailed hazard report for your city. It should be broken up into sections with professional language.",
+      `Recent Hazards and Reports in your city: ${JSON.stringify(localPosts)}`
     )
   };
 
