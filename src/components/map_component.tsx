@@ -1,23 +1,34 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { Post } from "@/supabase/schema";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
 const DEFAULT_CENTER: [number, number] = [-73.9855, 40.7484]; // Empire State Building coordinates
 
-export default function Map() {
+interface MapProps {
+  posts: Post[];
+}
+
+export default function Map({ posts }: MapProps) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<mapboxgl.Map | null>(null);
-  const markerInstance = useRef<mapboxgl.Marker | null>(null);
+  const markerInstances = useRef<mapboxgl.Marker[]>([]);
+  const userMarkerInstance = useRef<mapboxgl.Marker | null>(null);
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
 
   const cleanupMap = () => {
-    if (markerInstance.current) {
-      markerInstance.current.remove();
-      markerInstance.current = null;
+    markerInstances.current.forEach((marker) => marker.remove());
+    markerInstances.current = [];
+
+    if (userMarkerInstance.current) {
+      userMarkerInstance.current.remove();
+      userMarkerInstance.current = null;
     }
+
     if (mapInstance.current) {
       mapInstance.current.remove();
       mapInstance.current = null;
@@ -36,10 +47,18 @@ export default function Map() {
       zoom: 15,
     });
 
-    markerInstance.current = new mapboxgl.Marker()
-      .setLngLat(DEFAULT_CENTER)
-      .addTo(mapInstance.current);
+    // marker for each post based on their lat lon
+    posts.forEach((post) => {
+      if (post.latitude && post.longitude) {
+        const marker = new mapboxgl.Marker({ color: "red" })
+          .setLngLat([post.longitude, post.latitude])
+          .addTo(mapInstance.current!);
 
+        markerInstances.current.push(marker);
+      }
+    });
+
+    // load map, get user location, add user marker
     mapInstance.current.on("load", () => {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
@@ -49,13 +68,19 @@ export default function Map() {
               position.coords.latitude,
             ];
 
-            if (mapInstance.current && markerInstance.current) {
+            setUserLocation(newLocation);
+            const userMarker = new mapboxgl.Marker({ color: "blue" })
+              .setLngLat(newLocation)
+              .addTo(mapInstance.current!);
+
+            userMarkerInstance.current = userMarker;
+
+            if (mapInstance.current) {
               mapInstance.current.flyTo({
                 center: newLocation,
-                zoom: 15,
+                zoom: 5,
                 duration: 2000,
               });
-              markerInstance.current.setLngLat(newLocation);
             }
           },
           (error) => {
@@ -65,7 +90,7 @@ export default function Map() {
       }
     });
 
-    // Handle window resize
+    // handle window resize
     const resizeMap = () => {
       if (mapInstance.current) {
         mapInstance.current.resize();
@@ -74,23 +99,18 @@ export default function Map() {
 
     window.addEventListener("resize", resizeMap);
 
-    const observer = new ResizeObserver((entries) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const _ of entries) {
-        if (mapInstance.current) {
-          mapInstance.current.resize();
-        }
-      }
-    });
-
-    observer.observe(mapContainer.current);
-
+    // cleanup
     return () => {
       window.removeEventListener("resize", resizeMap);
-      observer.disconnect();
       cleanupMap();
     };
-  }, []);
+  }, [posts]);
+
+  useEffect(() => {
+    if (userLocation && mapInstance.current && userMarkerInstance.current) {
+      userMarkerInstance.current.setLngLat(userLocation);
+    }
+  }, [userLocation]);
 
   return (
     <div
