@@ -8,7 +8,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 const MOVEMENT_RANGE = 0.004; // How far the map can move from center
 const SPRING_STRENGTH = 0.03; // How quickly it bounces back (higher = faster)
 const DAMPING = 0.98; // Reduces oscillation (lower = more damping)
-const ANIMATION_SPEED = 0.01; // Speed of the automatic movement
+const ANIMATION_SPEED = 0.01; // Slower speed for more subtle movement
 
 // Santa Clara University coordinates [longitude, latitude] from API
 const SCU_COORDINATES: [number, number] = [-121.952742, 37.34412];
@@ -31,9 +31,9 @@ export default function BackgroundMap() {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/light-v11',
         center: SCU_COORDINATES,
-        zoom: 15.5,
+        zoom: 14.5, // Slightly zoomed out to show more context
         bearing: -30,
-        pitch: 45,
+        pitch: 60, // More tilted for better perspective
         interactive: false,
         attributionControl: false,
       });
@@ -91,7 +91,7 @@ export default function BackgroundMap() {
       try {
         time.current += ANIMATION_SPEED;
         
-        // Create a figure-8 pattern
+        // Create a more gentle figure-8 pattern
         const targetX = Math.sin(time.current) * Math.cos(time.current * 0.5) * MOVEMENT_RANGE;
         const targetY = Math.sin(time.current * 0.7) * MOVEMENT_RANGE;
 
@@ -110,6 +110,10 @@ export default function BackgroundMap() {
         const newLat = SCU_COORDINATES[1] - velocity.current.y;
 
         map.current.setCenter([newLng, newLat]);
+        
+        // Slowly rotate the bearing for added effect
+        const currentBearing = map.current.getBearing();
+        map.current.setBearing(currentBearing + 0.02);
       } catch (error) {
         console.error('Animation error:', error);
       }
@@ -134,13 +138,9 @@ export default function BackgroundMap() {
         ref={mapContainer} 
         className="absolute inset-0 w-full h-full"
         style={{ 
-          opacity: 0.9,
-          filter: 'saturate(0.8) brightness(1.1)',
+          opacity: 0.85,
+          filter: 'saturate(0.9) brightness(1.1)',
         }}
-      />
-      <div 
-        className="absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-white/70 pointer-events-none" 
-        style={{ mixBlendMode: 'overlay' }}
       />
     </div>
   );

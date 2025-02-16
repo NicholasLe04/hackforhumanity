@@ -26,7 +26,14 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen relative">
+      {/* Background map that extends down */}
+      <div className="fixed inset-0 w-full h-full z-0">
+        <BackgroundMap />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/80 via-white/40 to-white/90 pointer-events-none" />
+      </div>
+
+      {/* Content */}
       <header className="fixed top-4 left-0 right-0 px-4 flex items-center justify-center z-[100]">
         <div className="flex items-center justify-between w-full max-w-5xl mx-auto px-6 py-2.5 bg-white/95 backdrop-blur-md border border-gray-200/20 rounded-full shadow-lg">
           <button 
@@ -68,12 +75,11 @@ export default function LandingPage() {
           </nav>
         </div>
       </header>
-      <main className="flex-1">
-        <section className="w-full pt-32 pb-12 md:py-24 lg:py-32 xl:py-48 relative overflow-hidden">
-          <BackgroundMap />
-          <div className="absolute inset-0 z-0 bg-gradient-to-b from-white/60 via-white/30 to-white">
-          </div>
-          <div className="container mx-auto px-4 md:px-6 relative z-10">
+
+      <main className="flex-1 relative z-10">
+        {/* Hero Section */}
+        <section className="w-full min-h-screen flex items-center justify-center py-32">
+          <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center space-y-8 text-center">
               <div className="space-y-6 max-w-4xl">
                 <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl/none text-gray-900">
@@ -112,8 +118,10 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-white relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+        {/* Rest of the sections with semi-transparent backgrounds */}
+        <section id="features" className="w-full py-12 md:py-24 lg:py-32 relative">
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
           <div className="container mx-auto px-4 md:px-6 relative">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">Key Features</h2>
@@ -138,8 +146,10 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100">
-          <div className="container mx-auto px-4 md:px-6">
+
+        <section id="how-it-works" className="w-full py-12 md:py-24 lg:py-32 relative">
+          <div className="absolute inset-0 bg-gray-50/90 backdrop-blur-sm"></div>
+          <div className="container mx-auto px-4 md:px-6 relative">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">How It Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <StepCard
@@ -160,8 +170,10 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section id="benefits" className="w-full py-12 md:py-24 lg:py-32 bg-white">
-          <div className="container mx-auto px-4 md:px-6">
+
+        <section id="benefits" className="w-full py-12 md:py-24 lg:py-32 relative">
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+          <div className="container mx-auto px-4 md:px-6 relative">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-gray-700 text-center mb-12">Perfect For Everyone.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <BeneficiaryCard
@@ -180,8 +192,9 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-red-600 via-red-500 to-red-600 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff12_1px,transparent_1px),linear-gradient(to_bottom,#ffffff12_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+
+        <section className="w-full py-12 md:py-24 lg:py-32 relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-600/90 via-red-500/90 to-red-600/90 backdrop-blur-sm"></div>
           <div className="container mx-auto px-4 md:px-6 text-center relative">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-white mb-4">
               Join the Safety Revolution
@@ -200,7 +213,8 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-      <footer className="w-full py-6 bg-white border-t">
+
+      <footer className="w-full py-6 bg-white/90 backdrop-blur-sm relative z-10 border-t border-gray-200/20">
         <div className="container mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center space-x-2">
@@ -217,7 +231,7 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
 interface FeatureCardProps {
