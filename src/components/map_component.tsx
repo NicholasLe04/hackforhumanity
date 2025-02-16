@@ -8,6 +8,7 @@ import { Home, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PersonIcon from "../../public/person-icon.svg";
+import { Feature, FeatureCollection, Point, Polygon } from 'geojson';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -53,24 +54,133 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
       zoom: 15,
     });
 
-    // marker for each post based on their lat lon
-    posts.forEach((post) => {
-      if (post.latitude && post.longitude) {
-        const marker = new mapboxgl.Marker({ color: post.urgency.toLowerCase() })
-          .setLngLat([post.longitude, post.latitude])
-          .addTo(mapInstance.current!);
+    // Add circle layers for warning radius
+    mapInstance.current.on('load', () => {
+      // Create a GeoJSON source with all posts
+      const geojsonData: FeatureCollection<Point> = {
+        type: 'FeatureCollection',
+        features: posts.map((post, index): Feature<Point> => ({
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [post.longitude, post.latitude],
+          },
+          properties: {
+            id: index,
+            urgency: post.urgency,
+            lat: post.latitude,
+          },
+        })),
+      };
 
-        // Add click handler to marker
-        marker.getElement().addEventListener('click', () => {
-          onMarkerClick?.(post);
-        });
+      // Add the source FIRST
+      mapInstance.current!.addSource('warning-areas', {
+        type: 'geojson',
+        data: geojsonData,
+      });
 
-        markerInstances.current.push(marker);
+      // Add a layer for the warning circles using fill-extrusion
+      mapInstance.current!.addLayer({
+        id: 'warning-circles',
+        type: 'fill-extrusion',
+        source: 'warning-areas',
+        paint: {
+          'fill-extrusion-color': [
+            'match',
+            ['get', 'urgency'],
+            'high', 'rgba(255, 0, 0, 0.2)',    // Red with opacity
+            'medium', 'rgba(255, 165, 0, 0.2)', // Orange with opacity
+            'low', 'rgba(255, 255, 0, 0.2)',    // Yellow with opacity
+            'rgba(255, 0, 0, 0.2)'              // Default red
+          ],
+          'fill-extrusion-height': 0,
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': 0.6
+        },
+        filter: ['==', '$type', 'Point']
+      });
+
+      // Add a source for the actual circles
+      posts.forEach((post, index) => {
+        if (post.latitude && post.longitude) {
+          const center: [number, number] = [post.longitude, post.latitude];
+          // Convert radius from miles to meters (1 mile = 1609.34 meters)
+          const radiusInMeters = (parseFloat(post.radius) || 10) * 1609.34;
+          const circlePoints = 64; // Number of points to make the circle smooth
+          const circle = createGeoJSONCircle(center, radiusInMeters, circlePoints);
+          
+          mapInstance.current!.addSource(`circle-${index}`, {
+            type: 'geojson',
+            data: circle
+          });
+
+          // Add fill layer for each circle
+          mapInstance.current!.addLayer({
+            id: `circle-fill-${index}`,
+            type: 'fill',
+            source: `circle-${index}`,
+            paint: {
+              'fill-color': [
+                'match',
+                ['literal', post.urgency.toLowerCase()],
+                'high', 'rgba(255, 0, 0, 0.2)',    // Red with opacity
+                'medium', 'rgba(255, 165, 0, 0.2)', // Orange with opacity
+                'low', 'rgba(255, 255, 0, 0.2)',    // Yellow with opacity
+                'rgba(255, 0, 0, 0.2)'              // Default red
+              ],
+              'fill-opacity': 0.6
+            }
+          });
+        }
+      });
+
+      // Helper function to create a GeoJSON circle
+      function createGeoJSONCircle(center: [number, number], radiusInMeters: number, points: number): Feature<Polygon> {
+        const coords: Feature<Polygon> = {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [[]]
+          },
+          properties: {}
+        };
+
+        const km = radiusInMeters / 1000;
+        const distanceX = km / (111.320 * Math.cos(center[1] * Math.PI / 180));
+        const distanceY = km / 110.574;
+
+        const steps = points;
+        const angle = 360 / steps;
+
+        for(let i = 0; i < steps; i++) {
+          const theta = (i * angle * Math.PI) / 180;
+          const x = center[0] + (distanceX * Math.cos(theta));
+          const y = center[1] + (distanceY * Math.sin(theta));
+          (coords.geometry.coordinates[0] as number[][]).push([x, y]);
+        }
+        
+        (coords.geometry.coordinates[0] as number[][]).push((coords.geometry.coordinates[0] as number[][])[0]);
+
+        return coords;
       }
-    });
 
-    // load map, get user location, add (custom) user marker
-    mapInstance.current.on("load", () => {
+      // marker for each post based on their lat lon
+      posts.forEach((post) => {
+        if (post.latitude && post.longitude) {
+          const marker = new mapboxgl.Marker({ color: post.urgency.toLowerCase() })
+            .setLngLat([post.longitude, post.latitude])
+            .addTo(mapInstance.current!);
+
+          // Add click handler to marker
+          marker.getElement().addEventListener('click', () => {
+            onMarkerClick?.(post);
+          });
+
+          markerInstances.current.push(marker);
+        }
+      });
+
+      // Get user location and add marker
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
@@ -101,7 +211,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
           },
         )
       }
-    })
+    });
 
     // handle window resize
     const resizeMap = () => {
