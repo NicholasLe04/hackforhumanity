@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Loader2 } from "lucide-react"
@@ -102,7 +102,7 @@ export default function ReportPage() {
     multiple: false,
   });
 
-  const debouncedGeocodeAddress = useCallback(
+  const debouncedGeocodeAddress = useMemo(() => 
     debounce(async (value) => {
       if (value) {
         const results = await geocodeAddress(value);
@@ -113,8 +113,7 @@ export default function ReportPage() {
         setAddressResults([]);
       }
     }, 300),
-    [setAddressResults]
-  );
+  [],);
 
   useEffect(() => {
     debouncedGeocodeAddress(address)

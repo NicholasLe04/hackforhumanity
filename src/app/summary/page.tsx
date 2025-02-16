@@ -13,7 +13,6 @@ import signInWithGoogle from "@/supabase/auth/signIn";
 import debounce from "lodash.debounce"
 
 import { useAuthContext } from "@/context/AuthContext"
-import MockReport from "@/app/summary/mock-summary"
 import { GeneratedReport } from "./summary-generator"
 
 const geocodeAddress = async (address: string) => {
