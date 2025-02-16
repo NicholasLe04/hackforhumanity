@@ -88,7 +88,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                 {/* Recent Incidents */}
                 <div className="flex-1 overflow-hidden">
                   <h2 className="text-base font-semibold text-gray-900 mb-2">Recent Incidents</h2>
-                  <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-220px)] pb-4">
+                  <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-250px)] pb-2 pr-1">
                     {filteredPosts.map((post) => {
                       const urgencyBgColor =
                         post.urgency === 'Red'
@@ -129,11 +129,6 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                             </div>
                           </div>
                         </div>
-
-
-
-
-
                     );
                   })}
                 </div>
