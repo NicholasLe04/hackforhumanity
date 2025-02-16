@@ -97,6 +97,7 @@ export default function ReportPage() {
 
     const data = new FormData();
     data.append("author_id", user.id);
+    data.append("title", title);
     data.append("longitude", lon);
     data.append("latitude", lat);
     data.append("description", description);
