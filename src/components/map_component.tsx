@@ -128,8 +128,9 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
         if (post.latitude && post.longitude) {
           const center: [number, number] = [post.longitude, post.latitude];
           // Convert radius from miles to meters (1 mile = 1609.34 meters)
-          const radiusInMeters = (parseFloat(post.radius) || 10) * 1609.34;
+          const radiusInMeters = (parseFloat(post.radius) || 0) * 1609.34;
           const circlePoints = 64; // Number of points to make the circle smooth
+
           const circle = createGeoJSONCircle(center, radiusInMeters, circlePoints);
           
           mapInstance.current!.addSource(`circle-${index}`, {
