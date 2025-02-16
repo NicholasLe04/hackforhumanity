@@ -36,7 +36,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
       <div className={`bg-white rounded-2xl shadow-lg border border-gray-200/20 p-4 flex-1 transition-all duration-500 ease-in-out ${
         !isExpanded ? "items-center" : ""
       }`}>
-        <div className={`flex items-center justify-between ${isExpanded ? "mb-6" : "mb-0"}`}>
+        <div className={`flex items-center justify-between ${isExpanded ? "mb-6" : "mb-0 flex-col gap-4"}`}>
           {isExpanded ? (
             <Link href="/" className="flex items-center justify-center group">
               <AlertTriangle className="h-6 w-6 text-red-600 group-hover:text-red-700 transition-colors" />
@@ -54,7 +54,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+            className="p-2 hover:bg-gray-100 border-black border-2 text-black rounded-xl transition-colors"
           >
             {isExpanded ? <X size={20} /> : <Menu size={20} />}
           </button>
