@@ -6,6 +6,11 @@ export type Post = {
   latitude: number
   longitude: number
   description: string
-  imageUrl?: string,
+  imageUrl?: string
+  summary: string
+  close_warning: string
+  far_warning: string
+  urgency: string
+  radius: string
   distance?: number
 }
