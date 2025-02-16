@@ -24,12 +24,12 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
 
   return (
     <div
-      className={`p-4 flex flex-col gap-4 transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 left-0 h-screen p-4 flex flex-col gap-4 transition-all duration-500 ease-in-out ${
         isExpanded ? "w-72" : "w-20"
       }`}
     >
       {/* Combined Logo and Incidents Section */}
-      <div className={`bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200/20 p-4 flex-1 transition-all duration-500 ease-in-out ${
+      <div className={`bg-white rounded-2xl shadow-lg border border-gray-200/20 p-4 flex-1 transition-all duration-500 ease-in-out ${
         !isExpanded ? "items-center" : ""
       }`}>
         <div className={`flex items-center justify-between ${isExpanded ? "mb-6" : "mb-0"}`}>
@@ -52,7 +52,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
           >
-            {isExpanded ? <X size={24} /> : <Menu size={24} />}
+            {isExpanded ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
 
@@ -88,8 +88,8 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
       </div>
 
       {/* User Profile Section */}
-      <div className={`bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200/20 p-4 transition-all duration-500 ease-in-out ${
-        !isExpanded ? "flex justify-center" : ""
+      <div className={`bg-white rounded-2xl shadow-lg border border-gray-200/20 p-4 transition-all duration-500 ease-in-out ${
+        !isExpanded ? "items-center" : ""
       }`}>
         {user ? (
           <div className={`flex items-center ${isExpanded ? "space-x-3" : ""}`}>
@@ -120,12 +120,18 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
           </div>
         ) : (
           isExpanded ? (
-            <Button onClick={signInWithGoogle} className="w-full bg-red-600 hover:bg-red-700">
-              Sign In
+            <Button 
+              onClick={signInWithGoogle} 
+              className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-full"
+            >
+              Sign In with Google
             </Button>
           ) : (
-            <Button onClick={signInWithGoogle} className="w-10 h-10 p-0 rounded-xl bg-red-600 hover:bg-red-700">
-              <AlertTriangle className="h-5 w-5 text-white" />
+            <Button 
+              onClick={signInWithGoogle} 
+              className="w-10 h-10 p-0 rounded-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <AlertTriangle className="h-5 w-5" />
             </Button>
           )
         )}
