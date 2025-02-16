@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
         }
 
         const localPosts = await getLocalPosts(latitude, longitude, radius);
-        const hazardReport = await generateReport(localPosts!, longitude, latitude, email);
+        const hazardReport = generateReport(localPosts!, longitude, latitude, email);
         // const hazardReport = await agentGenerateReport(process.env.OPENAI_API_KEY!, localPosts!);
 
         return new Response(JSON.stringify({ hazardReport }), { status: 200 });

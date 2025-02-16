@@ -54,11 +54,11 @@ export default function MapPage() {
   const handleIncidentClick = (latitude: number, longitude: number) => {
     setSelectedLocation([longitude, latitude]);
   };
+  
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-
         const data = await getSortedDistances(selectedLocation[1], selectedLocation[0]);
 
         if (data) {

@@ -16,7 +16,7 @@ interface LocalPost {
   distance: number
 }
 
-interface GeneratedReport {
+export interface GeneratedReport {
   userDetails: {
     email: string
     generatedAt: string
