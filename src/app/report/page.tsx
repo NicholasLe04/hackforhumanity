@@ -8,6 +8,8 @@ import { useDropzone } from "react-dropzone";
 import { ChevronDown, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import debounce from "lodash.debounce"
+
 import {
   Select,
   SelectContent,
@@ -21,6 +23,7 @@ import toast from "react-hot-toast";
 import { useAuthContext } from "@/context/AuthContext"; // where you have loading + user
 //import { User } from "@supabase/supabase-js";
 import signInWithGoogle from "@/supabase/auth/signIn";
+
 
 const geocodeAddress = async (address: string) => {
   const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
@@ -89,7 +92,7 @@ export default function ReportPage() {
     setSelectedImage(file);
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
-  }, []);
+  }, [setSelectedImage, setImagePreview]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -98,6 +101,25 @@ export default function ReportPage() {
     },
     multiple: false,
   });
+
+  const debouncedGeocodeAddress = useCallback(
+    debounce(async (value) => {
+      if (value) {
+        const results = await geocodeAddress(value)
+        if (results && results.length > 0) {
+          setAddressResults(results)
+        }
+      } else {
+        setAddressResults([])
+      }
+    }, 300),
+    [],
+  )
+
+  useEffect(() => {
+    debouncedGeocodeAddress(address)
+    return () => debouncedGeocodeAddress.cancel()
+  }, [address, debouncedGeocodeAddress])
 
   // If locationType = auto, get geolocation (unconditional)
   useEffect(() => {
