@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { Post } from "@/supabase/schema";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface PostModalProps {
   post: Post | null;
@@ -59,8 +60,8 @@ export default function PostModal({ post, onClose }: PostModalProps) {
         <div className="space-y-6">
           {/* Image Section */}
           <div className="flex justify-center rounded-xl overflow-hidden bg-gray-100 -mt-2">
-            <img
-              src={post.imageUrl}
+            <Image
+              src={post.imageUrl || "/placeholder.svg"} // idk i just need a placeholder so lint isn't mad
               alt={post.title}
               className="max-w-full max-h-[70vh] rounded-xl object-contain"
               style={{ width: 'auto', height: 'auto' }}
