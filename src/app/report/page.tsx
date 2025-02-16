@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 
 import { useAuthContext } from "@/context/AuthContext"; // where you have loading + user
 //import { User } from "@supabase/supabase-js";
-import signInWithGoogle from "@/supabase/auth/signIn"; // adjust path as needed
+import signInWithGoogle from "@/supabase/auth/signIn";
 
 const geocodeAddress = async (address: string) => {
   const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(

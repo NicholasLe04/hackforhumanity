@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import toast from "react-hot-toast"
+import signInWithGoogle from "@/supabase/auth/signIn";
 
 import { useAuthContext } from "@/context/AuthContext"
 import MockReport from "@/app/summary/mock-summary"
@@ -49,7 +50,7 @@ const geocodeAddress = async (address: string) => {
 }
 
 export default function ReportPage() {
-  const { user } = useAuthContext()
+  const { user, loading } = useAuthContext();
 
   const [radius, setRadius] = useState<number>(5)
   const [locationType, setLocationType] = useState<"auto" | "manual" | "address">("auto")
@@ -68,19 +69,31 @@ export default function ReportPage() {
   const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
+  // If locationType = auto, get geolocation (unconditional)
   useEffect(() => {
     if (locationType === "auto") {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLat(position.coords.latitude.toFixed(10))
-          setLon(position.coords.longitude.toFixed(10))
+          setLat(position.coords.latitude.toFixed(10));
+          setLon(position.coords.longitude.toFixed(10));
         },
         (error) => {
-          console.error("Error getting location:", error)
-        },
-      )
+          console.error("Error getting location:", error);
+        }
+      );
     }
-  }, [locationType])
+  }, [locationType]);
+
+  // 2. If still loading user info, show a loading indicator
+  if (loading) {
+    return <div className="p-8">Loading user info...</div>;
+  }
+
+  // 3. If done loading but there's no user, sign in
+  if (!user) {
+    signInWithGoogle(); // triggers Supabase OAuth
+    return <div className="p-8">Redirecting to sign in...</div>;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
