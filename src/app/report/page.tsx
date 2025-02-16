@@ -12,7 +12,7 @@
   import { Textarea } from "@/components/ui/textarea"
   import { useAuthContext } from "@/context/AuthContext"
   import { User } from "@supabase/supabase-js"
-  import { useToast } from "@/hooks/use-toast";
+  import toast from 'react-hot-toast';
 
   const geocodeAddress = async (address: string) => {
     const endpoint = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=5`;
@@ -61,7 +61,6 @@
     }>>([])
     const [selectedAddress, setSelectedAddress] = useState<number | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { toast } = useToast();
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
       const file = acceptedFiles[0]
@@ -118,11 +117,7 @@
         }
     
         // success toast
-        toast({
-          title: "Success",
-          description: "Report successfully submitted!",
-          variant: "default",
-        });
+        toast.success('Report successfully submitted!');
     
         // clear form
         setSelectedImage(null);
@@ -139,11 +134,7 @@
       } catch (error) {
         console.error("Submission error:", error);
         // error toast
-        toast({
-          title: "Error",
-          description: "Failed to submit report. Please try again.",
-          variant: "destructive",
-        });
+        toast.error('Failed to submit report. Please try again.');
       } finally {
         setIsLoading(false);
       }
