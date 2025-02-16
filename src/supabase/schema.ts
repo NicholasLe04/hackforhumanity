@@ -7,4 +7,9 @@ export type Post = {
   longitude: number
   description: string
   imageUrl?: string
+  summary: string
+  close_warning: string
+  far_warning: string
+  urgency: string
+  radius: string
 }
