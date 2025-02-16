@@ -7,6 +7,7 @@ import { Post } from "@/supabase/schema";
 import { Home, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import PersonIcon from "../../public/person-icon.svg";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
 
@@ -68,37 +69,39 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
       }
     });
 
-    // load map, get user location, add user marker
+    // load map, get user location, add (custom) user marker
     mapInstance.current.on("load", () => {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            const newLocation: [number, number] = [
-              position.coords.longitude,
-              position.coords.latitude,
-            ];
+            const newLocation: [number, number] = [position.coords.longitude, position.coords.latitude]
 
-            setUserLocation(newLocation);
-            const userMarker = new mapboxgl.Marker({ color: "blue" })
-              .setLngLat(newLocation)
-              .addTo(mapInstance.current!);
+            setUserLocation(newLocation)
+            const el = document.createElement("div")
+            el.className = "custom-marker"
+            el.style.backgroundImage = `url(${PersonIcon.src})`
+            el.style.width = "20px"
+            el.style.height = "20px"
+            el.style.backgroundSize = "100%"
 
-            userMarkerInstance.current = userMarker;
+            const userMarker = new mapboxgl.Marker(el).setLngLat(newLocation).addTo(mapInstance.current!)
+
+            userMarkerInstance.current = userMarker
 
             if (mapInstance.current) {
               mapInstance.current.flyTo({
                 center: newLocation,
                 zoom: 5,
                 duration: 2000,
-              });
+              })
             }
           },
           (error) => {
-            console.error("Error getting location:", error);
-          }
-        );
+            console.error("Error getting location:", error)
+          },
+        )
       }
-    });
+    })
 
     // handle window resize
     const resizeMap = () => {
