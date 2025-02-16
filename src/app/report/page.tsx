@@ -9,6 +9,7 @@ import { ChevronDown, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea" // Import Textarea component
 import { useAuthContext } from "@/context/AuthContext"
 import { User } from "@supabase/supabase-js"
 
@@ -91,8 +92,8 @@ export default function ReportPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Here you'll add the logic to submit the report
-    console.log('Submitting:', { selectedImage, description, location });
+    // Remove the undefined location variable
+    console.log('Submitting:', { selectedImage, description, lat, lon });
 
     const data = new FormData();
     data.append("author_id", user.id);
@@ -142,12 +143,12 @@ export default function ReportPage() {
             <label htmlFor="description" className="block text-sm font-medium">
               Description
             </label>
-            <textarea
+            <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Describe incident..."
-              className="placeholder-gray-500 placeholder-opacity-100 w-full border border-gray-300 rounded-md text-sm p-2"
+              className="h-32"
             />
           </div>
 
