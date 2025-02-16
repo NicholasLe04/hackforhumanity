@@ -23,7 +23,8 @@ export default function MapPage() {
     }
 
     // Step 2: Calculate the distance in JavaScript for each row
-    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    // This func returns 
+    const calculateRawDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
       const R = 3958.8; // Earth's radius in km
       const X = (lat1 * Math.PI) / 180;
       const Y = (lat2 * Math.PI) / 180;
@@ -38,14 +39,23 @@ export default function MapPage() {
       return R * c; // Distance in km
     };
 
+    const calculateDistance = (dist: number, rad: number) => {
+      
+      if(dist < rad){
+        return -1;
+      }
+      return dist;
+    };
+
     // Step 3: Add the calculated distance to each data object
     const dataWithDistances = data.map((row) => {
-      const distance = calculateDistance(current_latitude, current_longitude, row.latitude, row.longitude);
-      return { ...row, distance: distance };
+      const distance = calculateRawDistance(current_latitude, current_longitude, row.latitude, row.longitude); 
+      const closer = calculateDistance(distance, row.radius);
+      return { ...row, distance: distance, closer: closer };
     });
 
     // Step 4: Sort the data by distance
-    dataWithDistances.sort((a, b) => a.distance - b.distance);
+    dataWithDistances.sort((a, b) => a.closer - b.closer);
 
     // Return the sorted data with distances
     return dataWithDistances;
