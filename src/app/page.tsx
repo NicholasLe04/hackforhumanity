@@ -36,7 +36,7 @@ export default function LandingPage() {
       {/* Content */}
       <header className="fixed top-4 left-0 right-0 px-4 flex items-center justify-center z-[100]">
         <div className="flex items-center justify-between w-full max-w-5xl mx-auto px-6 py-2.5 bg-white/95 backdrop-blur-md border border-gray-200/20 rounded-full shadow-lg">
-          <button 
+          <button
             onClick={scrollToTop}
             className="flex items-center justify-center group"
           >
@@ -49,20 +49,20 @@ export default function LandingPage() {
             </span>
           </button>
           <nav className="hidden md:flex items-center space-x-8">
-            <button 
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors" 
+            <button
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
               onClick={() => scrollToSection('features')}
             >
               Features
             </button>
-            <button 
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors" 
+            <button
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
               onClick={() => scrollToSection('how-it-works')}
             >
               How it Works
             </button>
-            <button 
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors" 
+            <button
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
               onClick={() => scrollToSection('benefits')}
             >
               Benefits
@@ -214,20 +214,15 @@ export default function LandingPage() {
         </section>
       </main>
 
-      <footer className="w-full py-6 bg-white/90 backdrop-blur-sm relative z-10 border-t border-gray-200/20">
+      <footer className="w-full py-6 bg-white/90 backdrop-blur-sm z-10 border-t border-gray-200/20 text-center">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 justify-center">
               <AlertTriangle className="h-5 w-5 text-red-600" />
-              <span className="font-bold">lmk</span>
+              <span className="font-bold text-black">lmk</span>
             </div>
-            <div className="flex items-center space-x-6">
-              <Link href="#" className="text-sm text-gray-500 hover:text-gray-900">Privacy</Link>
-              <Link href="#" className="text-sm text-gray-500 hover:text-gray-900">Terms</Link>
-              <Link href="#" className="text-sm text-gray-500 hover:text-gray-900">Contact</Link>
+              <div>
+                <p className="text-sm text-gray-500">© 2025 lmk. All rights reserved.</p>
             </div>
-            <p className="text-sm text-gray-500">© 2025 lmk. All rights reserved.</p>
-          </div>
         </div>
       </footer>
     </div>
