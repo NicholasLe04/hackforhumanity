@@ -49,14 +49,23 @@ export default function MapPage() {
         }
 
         if (data) {
-          console.log(data)
-          setPosts(data);
+          const postsWithImages = data.map((post) => {
+            const imageUrl = supabase.storage
+              .from("images")
+              .getPublicUrl(`${post.id}`).data.publicUrl;
+
+            return {
+              ...post,
+              imageUrl: imageUrl,
+            };
+          });
+
+          setPosts(postsWithImages);
         }
       } catch (error) {
         console.error("An unexpected error occurred:", error);
       }
     };
-
     fetchPosts();
   }, []);
 
