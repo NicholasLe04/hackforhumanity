@@ -89,9 +89,9 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
             'match',
             ['get', 'urgency'],
             'Red', 'rgba(255, 0, 0, 0.2)',    // Red with opacity
+            'Orange', 'rgba(255, 165, 0, 0.2)', // Orange with opacity
             'Yellow', 'rgba(255, 255, 0, 0.2)', // Yellow with opacity
-            'Green', 'rgba(0, 255, 0, 0.2)',    // Green with opacity
-            'rgba(255, 0, 0, 0.2)'              // Default red
+            'rgba(0, 0, 0, 0)'              // Default nothing (no opacity)
           ],
           'fill-extrusion-height': 0,
           'fill-extrusion-base': 0,
@@ -124,9 +124,9 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
                 'match',
                 ['literal', post.urgency],
                 'Red', 'rgba(255, 0, 0, 0.2)',    // Red with opacity
+                'Orange', 'rgba(255, 165, 0, 0.2)', // Orange with opacity
                 'Yellow', 'rgba(255, 255, 0, 0.2)', // Yellow with opacity
-                'Green', 'rgba(0, 255, 0, 0.2)',    // Green with opacity
-                'rgba(255, 0, 0, 0.2)'              // Default red
+                'rgba(0, 0, 0, 0)'              // Default nothing (no opacity)
               ],
               'fill-opacity': 0.6
             }
