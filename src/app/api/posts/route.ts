@@ -1,5 +1,5 @@
 "use server"
-import { filterMe, classifyMe, warnMe, summarizeMe, mergeMe } from '../../../lib/agents/fetchOpenAI';
+import { agentFilter, agentClassify, agentGenerateWarnings, agentSummarize, agentMergeJSON } from '../../../lib/agents/fetchOpenAI';
 import { supabase } from '@/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -12,18 +12,17 @@ export async function POST(req: NextRequest) {
     const longitude = formData.get("longitude") as string;
     const description = formData.get("description") as string;
     const image = formData.get("image") as File;
-    const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
 
     if (!image) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
     // Handle ai agent logic
-    const filtered_response = await filterMe(OPENAI_API_KEY,`${title} ${description}`,image)
-    const class_response = await classifyMe(OPENAI_API_KEY,filtered_response)
-    const warn_response = await warnMe(OPENAI_API_KEY,filtered_response)
-    const summary_response = await summarizeMe(OPENAI_API_KEY,filtered_response)
-    const merge_response = await mergeMe(OPENAI_API_KEY,summary_response,warn_response,class_response)
+    const filtered_response = await agentFilter(process.env.OPENAI_API_KEY!,`${title} ${description}`,image)
+    const class_response = await agentClassify(process.env.OPENAI_API_KEY!,filtered_response)
+    const warn_response = await agentGenerateWarnings(process.env.OPENAI_API_KEY!,filtered_response)
+    const summary_response = await agentSummarize(process.env.OPENAI_API_KEY!,filtered_response)
+    const merge_response = await agentMergeJSON(process.env.OPENAI_API_KEY!,summary_response,warn_response,class_response)
 
     const analysis_json = JSON.parse(merge_response.split('\n').slice(1, -1).join('\n'));
 
