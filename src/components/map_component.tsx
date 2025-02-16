@@ -11,9 +11,10 @@ const DEFAULT_CENTER: [number, number] = [-73.9855, 40.7484]; // Empire State Bu
 
 interface MapProps {
   posts: Post[];
+  selectedLocation: [number, number] | null;
 }
 
-export default function Map({ posts }: MapProps) {
+export default function Map({ posts, selectedLocation }: MapProps) {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const mapInstance = useRef<mapboxgl.Map | null>(null);
   const markerInstances = useRef<mapboxgl.Marker[]>([]);
@@ -111,6 +112,17 @@ export default function Map({ posts }: MapProps) {
       userMarkerInstance.current.setLngLat(userLocation);
     }
   }, [userLocation]);
+
+  // Add effect to handle selected location changes
+  useEffect(() => {
+    if (selectedLocation && mapInstance.current) {
+      mapInstance.current.flyTo({
+        center: selectedLocation,
+        zoom: 15,
+        duration: 2000,
+      });
+    }
+  }, [selectedLocation]);
 
   return (
     <div

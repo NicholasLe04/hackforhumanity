@@ -15,9 +15,10 @@ interface SidebarProps {
   isExpanded: boolean;
   setIsExpanded: (value: boolean) => void;
   posts: Post[];
+  onIncidentClick?: (latitude: number, longitude: number) => void;
 }
 
-export default function Sidebar({ isExpanded, setIsExpanded, posts }: SidebarProps) {
+export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentClick }: SidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuthContext() as { user: User | null };
 
@@ -70,7 +71,8 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts }: SidebarPro
               {posts.map((post) => (
                 <div 
                   key={post.id} 
-                  className="p-3 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm"
+                  className="p-3 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
+                  onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                 >
                   <p className="text-gray-900">{post.title}</p>
                 </div>

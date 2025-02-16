@@ -14,6 +14,7 @@ import { Post } from "@/supabase/schema"
 export default function MapPage() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
   const [posts, setPosts] = useState<Post[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<[number, number] | null>(null);
   const router = useRouter();
 
   const handleReportClick = async (e: React.MouseEvent) => {
@@ -29,6 +30,10 @@ export default function MapPage() {
 
     // If user is signed in, go to /report
     router.push("/report");
+  };
+
+  const handleIncidentClick = (latitude: number, longitude: number) => {
+    setSelectedLocation([longitude, latitude]);
   };
 
   useEffect(() => {
@@ -59,11 +64,12 @@ export default function MapPage() {
         <Sidebar 
           isExpanded={isSidebarExpanded} 
           setIsExpanded={setIsSidebarExpanded} 
-          posts={posts} 
+          posts={posts}
+          onIncidentClick={handleIncidentClick}
         />
       </div>
       <div className="absolute inset-0">
-        <Map posts={posts} />
+        <Map posts={posts} selectedLocation={selectedLocation} />
       </div>
       <Button 
         onClick={handleReportClick} 
