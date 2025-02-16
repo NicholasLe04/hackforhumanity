@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Loader2 } from "lucide-react"
 import { useDropzone } from "react-dropzone";
 import { ChevronDown, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -150,8 +151,14 @@ export default function ReportPage() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      toast.success("Report successfully submitted!");
-
+      const result = await response.json();
+      if (result.message === "No Danger Detected") {
+        toast.error("Report denied.");
+      }
+      else {
+        toast.success("Report successfully submitted!");
+      }
+      
       // Clear form
       setSelectedImage(null);
       setImagePreview(null);
@@ -359,7 +366,13 @@ export default function ReportPage() {
           >
             {isLoading ? "Submitting..." : "Submit Report"}
           </Button>
+          {isLoading && (
+            <div className="flex justify-center">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          )}
         </form>
+       
       </div>
 
       {/* Right Column - Image Upload */}

@@ -54,7 +54,7 @@ export default function PostModal({ post, onClose }: PostModalProps) {
           onClick={onClose}
           className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-xl transition-colors z-10"
         >
-          <X size={20} />
+          <X size={20} className="text-black"/>
         </button>
 
         <div className="space-y-6">
