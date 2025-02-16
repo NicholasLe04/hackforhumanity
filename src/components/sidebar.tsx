@@ -142,7 +142,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                         ? 'border-yellow-500'
                         : post.urgency === 'Green'
                         ? 'border-green-500'
-                        : 'border-blue-500'
+                        : 'border-orange-500'
 
                     const distanceText =
                       post.distance && post.distance < 1
@@ -156,10 +156,10 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                           ${post.urgency === 'Red'
                             ? 'bg-red-200 hover:bg-red-500'
                             : post.urgency === 'Yellow'
-                            ? 'bg-yellow-400 hover:bg-yellow-600'
+                            ? 'bg-yellow-200 hover:bg-yellow-400'
                             : post.urgency === 'Green'
                             ? 'bg-green-200 hover:bg-green-400'
-                            : 'bg-blue-200 hover:bg-blue-400'}`}
+                            : 'bg-orange-200 hover:bg-orange-400'}`}
                         onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                       >
                         <div className="flex items-center">
