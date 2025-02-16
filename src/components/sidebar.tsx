@@ -1,43 +1,36 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Search, Menu, X, LogOut, AlertTriangle } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-import { useAuthContext } from "@/context/AuthContext";
-import signInWithGoogle from "@/supabase/auth/signIn";
-import signOut from "@/supabase/auth/signOut";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Post } from "@/supabase/schema";
+import { useState, useEffect } from "react"
+import { Search, Menu, X, LogOut, AlertTriangle } from 'lucide-react'
+import type { User } from "@supabase/supabase-js"
+import { useAuthContext } from "@/context/AuthContext"
+import signInWithGoogle from "@/supabase/auth/signIn"
+import signOut from "@/supabase/auth/signOut"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import type { Post } from "@/supabase/schema"
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar"
 
 interface SidebarProps {
-  isExpanded: boolean;
-  setIsExpanded: (value: boolean) => void;
-  posts: Post[];
-  onIncidentClick?: (latitude: number, longitude: number) => void;
+  isExpanded: boolean
+  setIsExpanded: (value: boolean) => void
+  posts: Post[]
+  onIncidentClick?: (latitude: number, longitude: number) => void
 }
 
-export default function Sidebar({
-  isExpanded,
-  setIsExpanded,
-  posts,
-  onIncidentClick,
-}: SidebarProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts); // Initialize with all posts
-  const { user } = useAuthContext() as { user: User | null };
+export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentClick }: SidebarProps) {
+  const [searchQuery, setSearchQuery] = useState("")
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts)
+  const { user } = useAuthContext() as { user: User | null }
 
   useEffect(() => {
-    // Filter posts whenever searchQuery or posts changes
-    const newFilteredPosts = posts.filter((post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredPosts(newFilteredPosts);
-  }, [searchQuery, posts]);
+    const newFilteredPosts = posts.filter((post) => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    setFilteredPosts(newFilteredPosts)
+  }, [searchQuery, posts])
 
   return (
     <div
-      className={`fixed top-0 left-0 h-1/2 p-4 flex flex-col transition-all duration-500 ease-in-out ${
+      className={`fixed top-0 left-0 h-[60vh] p-4 flex flex-col transition-all duration-500 ease-in-out ${
         isExpanded ? "w-72" : "w-20"
       }`}
     >
@@ -47,11 +40,7 @@ export default function Sidebar({
         }`}
       >
         {/* Header with logo and close button */}
-        <div
-          className={`flex items-center h-auto justify-between ${
-            isExpanded ? "mb-3" : "mb-3 flex-col gap-3"
-          }`}
-        >
+        <div className={`flex items-center h-auto justify-between ${isExpanded ? "mb-3" : "mb-3 flex-col gap-3"}`}>
           {isExpanded ? (
             <Link href="/" className="flex items-center justify-center group">
               <AlertTriangle className="h-5 w-5 text-red-600 group-hover:text-red-700 transition-colors" />
@@ -75,78 +64,89 @@ export default function Sidebar({
           </button>
         </div>
 
-        {isExpanded && (
-          <>
-            {/* Search bar */}
-            <div className="relative mb-3">
-              <input
-                type="text"
-                placeholder="Search location..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-1.5 pr-8 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
-              />
-              <Search className="absolute right-2 top-2 text-gray-400" size={16} />
-            </div>
+        {/* Main content */}
+        <div className="flex-1 flex flex-col min-h-0">
+          {isExpanded && (
+            <>
+              {/* Search bar */}
+              <div className="relative mb-3">
+                <input
+                  type="text"
+                  placeholder="Search location..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full p-1.5 pr-8 text-sm rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
+                />
+                <Search className="absolute right-2 top-2 text-gray-400" size={16} />
+              </div>
 
-            {/* Recent Incidents */}
-            <div className="flex-1">
-              <h2 className="text-base font-semibold text-gray-900 mb-2">
-                Recent Incidents
-              </h2>
-              <div className="space-y-1.5 overflow-y-auto max-h-[calc(50vh-180px)]">
-                {filteredPosts.map((post) => (
-                  <div
-                    key={post.id}
-                    className="p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
-                    onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
+              {/* Recent Incidents */}
+              <div className="flex-1 overflow-hidden">
+                <h2 className="text-base font-semibold text-gray-900 mb-2">Recent Incidents</h2>
+                <div className="space-y-1.5 overflow-y-auto max-h-[calc(60vh-220px)]">
+                  {filteredPosts.map((post) => (
+                    <div
+                      key={post.id}
+                      className="p-2 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
+                      onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
+                    >
+                      <p className="text-sm text-gray-900">{post.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* User section at bottom */}
+        <div className={`mt-3 pt-3 border-t border-gray-200 ${!isExpanded ? "w-full flex justify-center" : ""}`}>
+          {user ? (
+            <div className={`flex items-center ${isExpanded ? "justify-between w-full" : "justify-center"}`}>
+              {isExpanded && (
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                  <Avatar
+                    className={`transition-all duration-500 ${
+                      !isExpanded ? "h-10 w-10" : ""
+                    }`}
                   >
-                    <p className="text-sm text-gray-900">{post.title}</p>
+                    <AvatarImage className="rounded-full" src={user.user_metadata.avatar_url} />
+                    <AvatarFallback>{user.email?.charAt(0).toUpperCase()}</AvatarFallback>
+                  </Avatar>
                   </div>
-                ))}
-              </div>
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium text-gray-900">{user.email?.split("@")[0]}</span>
+                    <span className="text-xs text-gray-500">{user.email}</span>
+                  </div>
+                </div>
+              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={signOut}
+                className={`${isExpanded ? "hover:bg-red-50 hover:text-red-600 rounded-full" : "w-8 h-8 p-0 hover:bg-red-50 hover:text-red-600 rounded-full"}`}
+              >
+                <LogOut size={16} />
+              </Button>
             </div>
-
-            {/* Sign in button at bottom */}
-            {!user && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <Button
-                  onClick={signInWithGoogle}
-                  className="w-full py-1 text-sm bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-full"
-                >
-                  Sign In with Google
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-
-        {/* Collapsed state sign in button */}
-        {!isExpanded && !user && (
-          <div className="mt-auto">
+          ) : isExpanded ? (
+            <Button
+              onClick={signInWithGoogle}
+              className="w-full py-1 text-sm bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-full"
+            >
+              Sign In with Google
+            </Button>
+          ) : (
             <Button
               onClick={signInWithGoogle}
               className="w-8 h-8 p-0 rounded-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <AlertTriangle className="h-4 w-4" />
             </Button>
-          </div>
-        )}
-
-        {/* Minimal user profile when logged in */}
-        {user && (
-          <div className="mt-auto">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={signOut}
-              className="w-8 h-8 p-0 hover:bg-red-50 hover:text-red-600 rounded-full"
-            >
-              <LogOut size={16} />
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
-  );
+  )
 }
