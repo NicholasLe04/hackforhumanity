@@ -67,6 +67,12 @@ export default function LandingPage() {
             >
               Benefits
             </button>
+            <button
+              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
+              onClick={() => scrollToSection('pricing')}
+            >
+              Pricing
+            </button>
             <Link href="/map">
               <Button className="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-2 rounded-full shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5">
                 Get Started
@@ -193,6 +199,50 @@ export default function LandingPage() {
           </div>
         </section>
 
+        <section id="pricing" className="w-full py-12 md:py-24 lg:py-32 relative">
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
+          <div className="container mx-auto px-4 md:px-6 relative">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">Simple, Transparent Pricing</h2>
+              <p className="text-gray-500 max-w-[600px] mx-auto">Choose the plan that best fits your needs.</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <PricingCard
+                title="Community"
+                price="Free"
+                description="Perfect for community members who want to contribute to safer neighborhoods."
+                features={[
+                  "Report hazards with AI classification",
+                  "View hazard map",
+                  "Basic location summaries",
+                  "Community updates",
+                  "Standard support"
+                ]}
+                buttonText="Get Started"
+                buttonLink="/map"
+                featured={false}
+              />
+              <PricingCard
+                title="Pro"
+                price="$9.99"
+                period="/month"
+                description="Enhanced features for organizations and power users who need more."
+                features={[
+                  "Everything in Community, plus:",
+                  "Advanced AI analysis",
+                  "Priority hazard verification",
+                  "Custom report dashboard",
+                  "Premium support",
+                  "Early access to new features"
+                ]}
+                buttonText="Coming Soon!"
+                buttonLink="/map"
+                featured={true}
+              />
+            </div>
+          </div>
+        </section>
+
         <section className="w-full py-12 md:py-24 lg:py-32 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-red-600/90 via-red-500/90 to-red-600/90 backdrop-blur-sm"></div>
           <div className="container mx-auto px-4 md:px-6 text-center relative">
@@ -200,12 +250,12 @@ export default function LandingPage() {
               Join the Safety Revolution
             </h2>
             <p className="mx-auto max-w-[600px] text-white/90 md:text-xl mb-8">
-              Be part of making your city safer. Sign up for early access and help shape the future of urban safety.
+              Be part of making your city safer. Try it now and help shape the future of safety.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link href="/map">
                 <Button className="bg-white text-red-600 hover:bg-gray-50 text-lg font-bold px-12 py-6 rounded-xl shadow-lg transform transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl border-2 border-white/20 backdrop-blur-sm">
-                  Get Started Now
+                  Try it Now!
                   <MapPin className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
@@ -279,5 +329,69 @@ function BeneficiaryCard({ title, description }: BeneficiaryCardProps) {
       <p className="text-gray-600">{description}</p>
     </div>
   )
+}
+
+interface PricingCardProps {
+  title: string;
+  price: string;
+  period?: string;
+  description: string;
+  features: string[];
+  buttonText: string;
+  buttonLink: string;
+  featured?: boolean;
+}
+
+function PricingCard({ title, price, period = "", description, features, buttonText, buttonLink, featured = false }: PricingCardProps) {
+  return (
+    <div className={`relative p-8 rounded-2xl transition-all duration-300 hover:-translate-y-1 ${
+      featured 
+        ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-xl hover:shadow-2xl border-2 border-red-400'
+        : 'bg-white border border-gray-200 shadow-sm hover:shadow-lg'
+    }`}>
+      {featured && (
+        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+          Most Popular
+        </div>
+      )}
+      <div className="mb-6">
+        <h3 className={`text-2xl font-bold mb-2 ${featured ? 'text-white' : 'text-gray-900'}`}>{title}</h3>
+        <div className="flex items-baseline mb-4">
+          <span className={`text-4xl font-bold ${featured ? 'text-white' : 'text-gray-900'}`}>{price}</span>
+          {period && <span className={`ml-1 text-lg ${featured ? 'text-white/90' : 'text-gray-500'}`}>{period}</span>}
+        </div>
+        <p className={`${featured ? 'text-white/90' : 'text-gray-600'}`}>{description}</p>
+      </div>
+      <ul className="mb-8 space-y-3">
+        {features.map((feature, index) => (
+          <li key={index} className="flex items-center">
+            <svg
+              className={`h-5 w-5 mr-3 ${featured ? 'text-white' : 'text-red-600'}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <span className={`${featured ? 'text-white/90' : 'text-gray-600'}`}>{feature}</span>
+          </li>
+        ))}
+      </ul>
+      <Link href={buttonLink}>
+        <Button className={`w-full py-6 text-lg font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 ${
+          featured
+            ? 'bg-white text-red-600 hover:bg-gray-50 shadow-lg hover:shadow-xl'
+            : 'bg-red-600 text-white hover:bg-red-700'
+        }`}>
+          {buttonText}
+        </Button>
+      </Link>
+    </div>
+  );
 }
 

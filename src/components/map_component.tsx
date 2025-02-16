@@ -284,6 +284,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
       {/* action buttons */}
       <div className="absolute top-4 right-6 bg-white rounded-full shadow-lg p-2 flex flex-col gap-2 z-50">
         <Button
+          title="My Location"
           className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300"
           onClick={() => {
             if (userLocation && mapInstance.current) {
@@ -299,6 +300,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
         </Button>
         <div className="w-[1px] bg-gray-200 my-2" />
         <Button
+          title="Toggle Circles"
           className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300"
           onClick={toggleCircleVisibility}
         >
@@ -310,13 +312,13 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
         </Button>
         <div className="w-[1px] bg-gray-200 my-2" />
         <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
-          <Link href="/report">
+          <Link href="/report" title="Report Incident">
             <AlertTriangle className="h-5 w-5 text-red-600" />
           </Link>
         </Button>
         <div className="w-[1px] bg-gray-200 my-2" />
         <Button asChild className="w-12 h-12 p-0 rounded-full hover:bg-gray-100 transition-all duration-300">
-          <Link href="/summary">
+          <Link href="/summary" title="View Summary">
             <FileText className="h-5 w-5 text-red-600" />
           </Link>
         </Button>
