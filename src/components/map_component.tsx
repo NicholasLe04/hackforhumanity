@@ -143,7 +143,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
       }}
     >
       <div ref={mapContainer} className="w-full h-full" />
-      
+
       {/* Action Buttons Pill */}
       <div className="absolute bottom-8 right-8 bg-white rounded-full shadow-lg p-2 flex gap-2 z-50">
         <Button

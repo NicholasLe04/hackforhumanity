@@ -51,16 +51,16 @@ export default function MapPage() {
   return (
     <div className="fixed inset-0 overflow-hidden">
       <div className="absolute top-0 left-0 h-full z-10">
-        <Sidebar 
-          isExpanded={isSidebarExpanded} 
-          setIsExpanded={setIsSidebarExpanded} 
+        <Sidebar
+          isExpanded={isSidebarExpanded}
+          setIsExpanded={setIsSidebarExpanded}
           posts={posts}
           onIncidentClick={handleIncidentClick}
         />
       </div>
       <div className="absolute inset-0">
-        <Map 
-          posts={posts} 
+        <Map
+          posts={posts}
           selectedLocation={selectedLocation}
           onMarkerClick={setSelectedPost}
         />
