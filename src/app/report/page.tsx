@@ -87,12 +87,12 @@ export default function ReportPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // useDropzone (unconditional)
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     setSelectedImage(file);
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
-  }, [setSelectedImage, setImagePreview]);
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -105,16 +105,16 @@ export default function ReportPage() {
   const debouncedGeocodeAddress = useCallback(
     debounce(async (value) => {
       if (value) {
-        const results = await geocodeAddress(value)
+        const results = await geocodeAddress(value);
         if (results && results.length > 0) {
-          setAddressResults(results)
+          setAddressResults(results);
         }
       } else {
-        setAddressResults([])
+        setAddressResults([]);
       }
     }, 300),
-    [],
-  )
+    [setAddressResults]
+  );
 
   useEffect(() => {
     debouncedGeocodeAddress(address)
