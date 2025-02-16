@@ -22,13 +22,17 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAuthContext() as { user: User | null };
 
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div
       className={`fixed top-0 left-0 h-screen p-4 flex flex-col gap-4 transition-all duration-500 ease-in-out ${
         isExpanded ? "w-72" : "w-20"
       }`}
     >
-      {/* Combined Logo and Incidents Section */}
+      {/* SIDEBAR */}
       <div className={`bg-white rounded-2xl shadow-lg border border-gray-200/20 p-4 flex-1 transition-all duration-500 ease-in-out ${
         !isExpanded ? "items-center" : ""
       }`}>
@@ -48,7 +52,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
               <AlertTriangle className="h-6 w-6 text-red-600 group-hover:text-red-700 transition-colors" />
             </Link>
           )}
-          <button 
+          <button
             onClick={() => setIsExpanded(!isExpanded)}
             className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
           >
@@ -64,7 +68,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
                 placeholder="Search location..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 pr-10 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50"
+                className="w-full p-2 pr-10 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white/50 text-black"
               />
               <Search className="absolute right-3 top-2.5 text-gray-400" size={20} />
             </div>
@@ -72,9 +76,9 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
             <div className="space-y-4">
               <h2 className="text-lg font-semibold text-gray-900">Recent Incidents</h2>
               <div className="space-y-2 max-h-[calc(100vh-300px)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-                {posts.map((post) => (
-                  <div 
-                    key={post.id} 
+                {filteredPosts.map((post) => (
+                  <div
+                    key={post.id}
                     className="p-3 rounded-xl bg-gray-50 hover:bg-white transition-colors border border-gray-200/10 shadow-sm cursor-pointer"
                     onClick={() => onIncidentClick?.(post.latitude, post.longitude)}
                   >
@@ -87,7 +91,7 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
         )}
       </div>
 
-      {/* User Profile Section */}
+      {/* user profile section */}
       <div className={`bg-white rounded-2xl shadow-lg border border-gray-200/20 p-4 transition-all duration-500 ease-in-out ${
         !isExpanded ? "items-center" : ""
       }`}>
@@ -108,9 +112,9 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
               </div>
             )}
             {isExpanded && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={signOut}
                 className="hover:bg-red-50 hover:text-red-600"
               >
@@ -120,15 +124,15 @@ export default function Sidebar({ isExpanded, setIsExpanded, posts, onIncidentCl
           </div>
         ) : (
           isExpanded ? (
-            <Button 
-              onClick={signInWithGoogle} 
+            <Button
+              onClick={signInWithGoogle}
               className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 rounded-full"
             >
               Sign In with Google
             </Button>
           ) : (
-            <Button 
-              onClick={signInWithGoogle} 
+            <Button
+              onClick={signInWithGoogle}
               className="w-10 h-10 p-0 rounded-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <AlertTriangle className="h-5 w-5" />
