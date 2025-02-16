@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { Post } from "@/supabase/schema";
-import { Home, AlertTriangle, Eye, EyeOff, FileText } from "lucide-react";
+import { AlertTriangle, Eye, EyeOff, FileText, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PersonIcon from "../../public/person-icon.svg";
@@ -295,7 +295,7 @@ export default function Map({ posts, selectedLocation, onMarkerClick }: MapProps
             }
           }}
         >
-          <Home className="h-5 w-5 text-red-600" />
+          <MapPin className="h-5 w-5 text-red-600" />
         </Button>
         <div className="w-[1px] bg-gray-200 my-2" />
         <Button
